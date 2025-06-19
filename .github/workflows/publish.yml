@@ -1,4 +1,4 @@
-name: Publish to GitHub Packages
+name: Publish Release
 
 on:
   push:
@@ -10,7 +10,7 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       packages: write
     
     steps:
@@ -20,9 +20,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          registry-url: 'https://npm.pkg.github.com'
-          scope: '@your-company'
+          node-version: '20'
+          cache: 'npm'
           
       - name: Install dependencies
         run: npm ci
@@ -39,7 +38,63 @@ jobs:
       - name: Build project
         run: npm run build
         
-      - name: Publish to GitHub Packages
-        run: npm publish
+      - name: Create release package
+        run: |
+          # Create npm package
+          npm pack
+          
+          # Create tarball with built distribution for manual installation
+          tar -czf docgen-dist.tar.gz dist/ package.json README.md
+
+      - name: Extract version from tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        uses: actions/create-release@v1
+        id: create_release
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release v${{ steps.get_version.outputs.VERSION }}
+          draft: false
+          prerelease: false
+          body: |
+            ## Installation (No Build Required)
+            
+            ### Option 1: Install directly from npm tarball
+            ```bash
+            npm install -g https://github.com/ixui/docgen/releases/download/v${{ steps.get_version.outputs.VERSION }}/ixui-docgen-${{ steps.get_version.outputs.VERSION }}.tgz
+            ```
+            
+            ### Option 2: Download and install manually
+            ```bash
+            wget https://github.com/ixui/docgen/releases/download/v${{ steps.get_version.outputs.VERSION }}/docgen-dist.tar.gz
+            tar -xzf docgen-dist.tar.gz
+            cd dist
+            npm install -g .
+            ```
+            
+            ## What's Changed
+            See the [commit history](https://github.com/ixui/docgen/commits/v${{ steps.get_version.outputs.VERSION }}) for detailed changes.
+
+      - name: Upload npm package
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./ixui-docgen-${{ steps.get_version.outputs.VERSION }}.tgz
+          asset_name: ixui-docgen-${{ steps.get_version.outputs.VERSION }}.tgz
+          asset_content_type: application/gzip
+
+      - name: Upload distribution tarball
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./docgen-dist.tar.gz
+          asset_name: docgen-dist.tar.gz
+          asset_content_type: application/gzip

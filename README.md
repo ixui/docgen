@@ -14,17 +14,40 @@ DocGen is a CLI tool that converts Markdown files into beautiful HTML documents 
 
 ## Installation
 
-### From npm (Public)
+### From GitHub Releases (Recommended)
+
+Download the latest pre-built package from [GitHub Releases](https://github.com/ixui/docgen/releases):
 
 ```bash
-# Install globally
-npm install -g @ixui/docgen
+# Method 1: Install directly from release tarball (no build required)
+npm install -g https://github.com/ixui/docgen/releases/download/v2.0.3/ixui-docgen-2.0.3.tgz
 
-# Or install locally in your project
-npm install --save-dev @ixui/docgen
+# Method 2: Download and install manually
+wget https://github.com/ixui/docgen/releases/download/v2.0.3/docgen-dist.tar.gz
+tar -xzf docgen-dist.tar.gz
+cd docgen-dist
+npm install -g .
+```
 
-# Or use with npx (no installation required)
-npx @ixui/docgen build ./docs
+### From Source (For Development)
+
+```bash
+# Clone and build from source
+git clone https://github.com/ixui/docgen.git
+cd docgen
+npm install
+npm run build
+npm link  # Makes 'docgen' command available globally
+```
+
+### Verify Installation
+
+```bash
+# Check if installation was successful
+docgen --version
+
+# View help
+docgen --help
 ```
 
 ### System Requirements
@@ -32,6 +55,7 @@ npx @ixui/docgen build ./docs
 - Node.js 18.0.0 or higher
 - NPM 6.0.0 or higher
 - Works on Windows, macOS, and Linux
+- **No build tools required** when using GitHub Releases
 
 ## Usage
 
@@ -197,6 +221,15 @@ MIT
 ## Support
 
 For issues and feature requests, please use the [GitHub Issues](https://github.com/ixui/docgen/issues) page.
+
+## Releases
+
+To create a new release:
+
+1. Update the version in `package.json`
+2. Commit the version change
+3. Create and push a git tag: `git tag v2.0.4 && git push origin v2.0.4`
+4. GitHub Actions will automatically build and create a release with pre-built packages
 
 ## Contributing
 
