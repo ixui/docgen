@@ -19,7 +19,7 @@
   },
   "scripts": {
     "build": "tsc && npm run copy-assets",
-    "copy-assets": "node -e \"const fs=require('fs'),path=require('path');['dist/styles','dist/search'].forEach(d=>fs.mkdirSync(d,{recursive:true}));fs.cpSync('src/styles',path.join('dist','styles'),{recursive:true});fs.readdirSync('src/search').filter(f=>f.endsWith('.js')).forEach(f=>fs.copyFileSync(path.join('src/search',f),path.join('dist/search',f)))\"",
+    "copy-assets": "node -e \"const fs=require('fs'),path=require('path');['dist/styles','dist/search','dist/templates'].forEach(d=>fs.mkdirSync(d,{recursive:true}));fs.cpSync('src/styles',path.join('dist','styles'),{recursive:true});fs.cpSync('src/templates',path.join('dist','templates'),{recursive:true});fs.readdirSync('src/search').filter(f=>f.endsWith('.js')).forEach(f=>fs.copyFileSync(path.join('src/search',f),path.join('dist/search',f)));fs.copyFileSync('src/styles/search.css',path.join('dist','styles','search.css'))\"",
     "dev": "tsc --watch",
     "test": "jest",
     "test:watch": "jest --watch",

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{metadata.title}} - DocGen</title>
+    <link rel="stylesheet" href="{{cssPath}}">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="site-title">{{metadata.title}}</h1>
+            <div class="search-link">
+                <a href="{{indexPath}}" class="search-button">🔍 検索</a>
+            </div>
+        </header>
+        
+        <div class="content-wrapper">
+            <aside class="sidebar">
+                {{{tocHtml}}}
+            </aside>
+            
+            <main class="main-content">
+                <article class="article">
+                    {{{content}}}
+                </article>
+                
+                <footer class="article-footer">
+                    <p class="last-modified">最終更新: {{formatDate metadata.lastModified}}</p>
+                </footer>
+            </main>
+        </div>
+    </div>
+</body>
+</html>

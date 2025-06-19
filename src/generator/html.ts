@@ -93,15 +93,24 @@ export class HtmlGenerator {
     }
   }
 
-  public async loadTemplate(themeName: string): Promise<void> {
-    const templatePath = path.join(__dirname, '..', 'templates', `${themeName}.hbs`);
+  public async loadTemplate(themeName: string, isSearchPage: boolean = false): Promise<void> {
+    let templatePath: string;
+    
+    if (isSearchPage) {
+      // Use search-specific template for index.html
+      templatePath = path.join(__dirname, '..', 'templates', 'search-index.hbs');
+    } else {
+      // Use regular template for other pages
+      templatePath = path.join(__dirname, '..', 'templates', `${themeName}.hbs`);
+    }
     
     try {
       const templateContent = await fs.readFile(templatePath, 'utf-8');
       this.compiledTemplate = Handlebars.compile(templateContent);
-    } catch {
-      // Fallback to default template
-      const defaultTemplate = this.getDefaultTemplate();
+    } catch (error) {
+      console.error(`Failed to load template from ${templatePath}:`, error);
+      // Fallback to appropriate default template
+      const defaultTemplate = isSearchPage ? this.getSearchIndexTemplate() : this.getDefaultTemplate();
       this.compiledTemplate = Handlebars.compile(defaultTemplate);
     }
   }
@@ -119,12 +128,9 @@ export class HtmlGenerator {
     <div class="container">
         <header class="header">
             <h1 class="site-title">{{metadata.title}}</h1>
-            {{#if searchEnabled}}
-            <div class="search-container">
-                <input type="text" id="search-input" class="search-input" placeholder="検索...">
-                <div id="search-results" class="search-results"></div>
+            <div class="search-link">
+                <a href="{{indexPath}}" class="search-button">🔍 検索</a>
             </div>
-            {{/if}}
         </header>
         
         <div class="content-wrapper">
@@ -143,29 +149,30 @@ export class HtmlGenerator {
             </main>
         </div>
     </div>
-    
-    {{#if searchEnabled}}
-    <script>
-        // lunr.js library embedded for local file compatibility
-        {{{lunrScript}}}
-        
-        // Ensure lunr is available globally
-        if (typeof lunr !== 'undefined') {
-            window.lunr = lunr;
-            console.log('Lunr.js loaded successfully');
-        } else {
-            console.error('Failed to load lunr.js');
-        }
-    </script>
-    <script>
-        // Search index data
-        window.searchIndex = {{{json searchIndex}}};
-    </script>
-    <script>
-        // Search client functionality
-        {{{searchScript}}}
-    </script>
-    {{/if}}
+</body>
+</html>`;
+  }
+
+  private getSearchIndexTemplate(): string {
+    // This would be the embedded search template - for now, return a simplified version
+    // In practice, this would be the same as the search-index.hbs file content
+    return `<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{metadata.title}} - ドキュメント検索</title>
+    <link rel="stylesheet" href="{{cssPath}}">
+</head>
+<body>
+    <div class="search-page">
+        <h1>{{metadata.title}} - ドキュメント検索</h1>
+        <input type="text" id="search-input" placeholder="検索キーワードを入力...">
+        <div id="search-results"></div>
+    </div>
+    <script>{{{lunrScript}}}</script>
+    <script>window.searchIndex = {{{json searchIndex}}};</script>
+    <script>{{{searchScript}}}</script>
 </body>
 </html>`;
   }
@@ -174,21 +181,28 @@ export class HtmlGenerator {
     document: ProcessedDocument,
     options: HtmlGeneratorOptions
   ): Promise<string> {
-    if (!this.compiledTemplate) {
-      await this.loadTemplate(options.theme);
-    }
+    // Determine if this is the search index page
+    const isSearchPage = options.outputFilePath ? 
+      path.basename(options.outputFilePath) === 'index.html' : false;
+    
+    // Always reload template to ensure correct template for page type
+    await this.loadTemplate(options.theme, isSearchPage);
 
-    // Load JavaScript libraries for embedding
-    if (options.searchEnabled) {
+    // Load JavaScript libraries for embedding (only for search page)
+    if (options.searchEnabled && isSearchPage) {
       await this.loadScripts();
     }
 
     // Calculate paths relative to output file
-    let cssPath = 'styles.css';
+    let cssPath = isSearchPage ? 'search.css' : 'styles.css';
     let indexPath = 'index.html';
     
     if (options.outputFilePath && options.outputDir) {
-      cssPath = PathUtils.getCssPath(options.outputFilePath, options.outputDir);
+      if (isSearchPage) {
+        cssPath = 'search.css'; // Search page always uses search.css at root level
+      } else {
+        cssPath = PathUtils.getCssPath(options.outputFilePath, options.outputDir);
+      }
       
       // Calculate relative path to index.html
       const relativeDepth = path.relative(options.outputDir, path.dirname(options.outputFilePath));
@@ -203,7 +217,8 @@ export class HtmlGenerator {
       content: document.content,
       tocHtml,
       cssPath,
-      searchEnabled: options.searchEnabled,
+      indexPath,
+      searchEnabled: options.searchEnabled && isSearchPage,
       searchIndex: document.searchIndex,
       lunrScript: this.lunrScript,
       searchScript: this.searchScript,

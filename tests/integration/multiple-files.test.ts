@@ -172,9 +172,13 @@ describe('Multiple Files Integration', () => {
       expect(readmeContent).toContain('ガイド');
       expect(readmeContent).toContain('チュートリアル');
       
-      // Check that HTML entities are properly escaped
-      // Note: Lunr.js script tag is expected for search functionality
-      expect(readmeContent).toContain('lunr.js'); // Search script should be present
+      // Check that search functionality is accessible via search button
+      expect(readmeContent).toContain('🔍 検索');
+      
+      // Check that index.html contains search functionality
+      const indexContent = await fs.readFile(path.join(testOutputDir, 'index.html'), 'utf-8');
+      expect(indexContent).toContain('lunr.js'); // Search script should be present in index only
+      expect(indexContent).toContain('search-input');
       
       // Check that malicious scripts are not present (this would be in markdown content)
       expect(readmeContent).not.toContain('<script>alert');
@@ -292,8 +296,10 @@ describe('Multiple Files Integration', () => {
         // (it's OK for JavaScript code to contain 'undefined')
         expect(nonScriptContent).not.toContain('undefined');
         
-        // All files should have TOC structure (even if empty)
-        expect(content).toContain('class="sidebar"');
+        // All files should have TOC structure (even if empty), except search index pages
+        if (!htmlFile.endsWith('index.html')) {
+          expect(content).toContain('class="sidebar"');
+        }
       }
     });
   });

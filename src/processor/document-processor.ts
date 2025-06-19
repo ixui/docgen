@@ -161,9 +161,16 @@ export class DocumentProcessor {
   }
 
   private async copyCssFile(outputDir: string): Promise<void> {
+    // Copy default styles
     const cssSource = path.join(__dirname, '..', 'styles', 'default.css');
     const cssDestination = path.join(outputDir, 'styles.css');
     await this.fileSystemUtils.copyFile(cssSource, cssDestination);
+    
+    // Copy search-specific styles
+    const searchCssSource = path.join(__dirname, '..', 'styles', 'search.css');
+    const searchCssDestination = path.join(outputDir, 'search.css');
+    await this.fileSystemUtils.copyFile(searchCssSource, searchCssDestination);
+    
     console.log('🎨 Copied CSS styles');
   }
 

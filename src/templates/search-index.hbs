@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{metadata.title}} - ドキュメント検索</title>
+    <link rel="stylesheet" href="search.css">
+</head>
+<body>
+    <div class="search-page">
+        <header class="search-header">
+            <h1 class="search-title">{{metadata.title}}</h1>
+            <p class="search-subtitle">ドキュメント全体から検索</p>
+        </header>
+        
+        <div class="document-count">
+            <div class="document-count-number" id="document-count">{{searchIndex.documents.length}}</div>
+            <div class="document-count-text">件のドキュメントから検索</div>
+        </div>
+        
+        <div class="search-form">
+            <input type="text" id="search-input" class="search-input" placeholder="検索キーワードを入力してください..." autofocus>
+            <div class="search-stats" id="search-stats"></div>
+        </div>
+        
+        <div class="search-results">
+            <div class="search-placeholder" id="search-placeholder">
+                検索キーワードを入力すると、ドキュメント全体から関連する内容を検索します。<br>
+                日本語、英語の両方に対応しています。
+            </div>
+            <div id="search-results-container" class="search-results-container"></div>
+        </div>
+    </div>
+    
+    <script>
+        // Lunr.js library embedded for local file compatibility
+        {{{lunrScript}}}
+        
+        // Ensure lunr is available globally
+        if (typeof lunr !== 'undefined') {
+            window.lunr = lunr;
+            console.log('Lunr.js loaded successfully');
+        } else {
+            console.error('Failed to load lunr.js');
+        }
+    </script>
+    <script>
+        // Search index data
+        window.searchIndex = {{{json searchIndex}}};
+    </script>
+    <script>
+        // Enhanced search functionality for dedicated search page
+        class SearchPage {
+            constructor() {
+                this.searchIndex = null;
+                this.documents = [];
+                this.searchInput = null;
+                this.searchStats = null;
+                this.searchPlaceholder = null;
+                this.searchResultsContainer = null;
+                this.isInitialized = false;
+            }
+
+            init(indexData) {
+                if (!indexData || !indexData.index || !indexData.documents) {
+                    console.warn('Search index data is not available');
+                    return;
+                }
+
+                if (typeof lunr === 'undefined' || !lunr) {
+                    console.error('Lunr.js library is not loaded. Search functionality will be disabled.');
+                    return;
+                }
+
+                try {
+                    this.searchIndex = lunr.Index.load(JSON.parse(indexData.index));
+                    this.documents = indexData.documents;
+                    this.setupUI();
+                    this.isInitialized = true;
+                    console.log(`Search initialized with ${this.documents.length} documents`);
+                    console.log('Sample documents:', this.documents.slice(0, 3).map(d => ({ id: d.id, title: d.title, url: d.url })));
+                } catch (error) {
+                    console.error('Failed to initialize search:', error);
+                }
+            }
+
+            setupUI() {
+                this.searchInput = document.getElementById('search-input');
+                this.searchStats = document.getElementById('search-stats');
+                this.searchPlaceholder = document.getElementById('search-placeholder');
+                this.searchResultsContainer = document.getElementById('search-results-container');
+
+                console.log('UI Elements found:', {
+                    searchInput: !!this.searchInput,
+                    searchStats: !!this.searchStats,
+                    searchPlaceholder: !!this.searchPlaceholder,
+                    searchResultsContainer: !!this.searchResultsContainer
+                });
+
+                if (!this.searchInput || !this.searchStats || !this.searchPlaceholder || !this.searchResultsContainer) {
+                    console.error('Search UI elements not found:', {
+                        searchInput: this.searchInput,
+                        searchStats: this.searchStats,
+                        searchPlaceholder: this.searchPlaceholder,
+                        searchResultsContainer: this.searchResultsContainer
+                    });
+                    return;
+                }
+
+                // Real-time search as user types
+                this.searchInput.addEventListener('input', (e) => {
+                    this.performSearch(e.target.value);
+                });
+
+                // Clear results when input is cleared
+                this.searchInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        this.searchInput.value = '';
+                        this.clearResults();
+                    }
+                });
+            }
+
+            performSearch(query) {
+                if (!this.isInitialized || !query.trim()) {
+                    this.clearResults();
+                    return;
+                }
+
+                try {
+                    const startTime = performance.now();
+                    
+                    // Enhanced query with wildcards and fuzzy matching
+                    let searchQuery = query.trim();
+                    if (!searchQuery.includes('*') && !searchQuery.includes('~')) {
+                        searchQuery = `${searchQuery}* ${searchQuery}~1 ${searchQuery}`;
+                    }
+                    
+                    const results = this.searchIndex.search(searchQuery);
+                    const endTime = performance.now();
+                    
+                    this.displayResults(results, query, endTime - startTime);
+                } catch (error) {
+                    console.error('Search error:', error);
+                    this.showError();
+                }
+            }
+
+            displayResults(results, query, searchTime) {
+                const totalResults = results.length;
+                
+                // Update search stats
+                this.searchStats.textContent = `${totalResults}件の結果を ${(searchTime).toFixed(2)}ms で見つけました`;
+                
+                console.log('Displaying results:', totalResults, 'results found');
+                
+                if (results.length === 0) {
+                    // Hide placeholder, show no results message
+                    this.searchPlaceholder.style.display = 'none';
+                    this.searchResultsContainer.classList.add('active');
+                    this.searchResultsContainer.innerHTML = `
+                        <div class="search-no-results">
+                            <h3>「${this.escapeHtml(query)}」の検索結果が見つかりません</h3>
+                            <p>検索のヒント:</p>
+                            <ul style="text-align: left; display: inline-block;">
+                                <li>キーワードのスペルを確認してください</li>
+                                <li>別のキーワードで試してみてください</li>
+                                <li>より一般的な用語を使用してみてください</li>
+                            </ul>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const resultsHtml = results.map(result => {
+                    const doc = this.documents.find(d => d.id === result.ref);
+                    if (!doc) {
+                        console.warn('Document not found for result:', result.ref);
+                        return '';
+                    }
+
+                    const snippet = this.createSnippet(doc.content, query);
+                    const finalUrl = doc.url;
+                    
+                    console.log('Rendering result:', { title: doc.title, url: finalUrl, snippet: snippet.substring(0, 50) + '...' });
+                    
+                    return `
+                        <div class="search-result">
+                            <a href="${finalUrl}" class="search-result-title">
+                                ${this.highlightQuery(doc.title, query)}
+                            </a>
+                            <div class="search-result-snippet">
+                                ${snippet}
+                            </div>
+                            <div class="search-result-url">${finalUrl}</div>
+                        </div>
+                    `;
+                }).filter(html => html.length > 0).join('');
+
+                console.log('Generated HTML length:', resultsHtml.length);
+                console.log('First 200 chars of HTML:', resultsHtml.substring(0, 200));
+
+                // Hide placeholder, show results container
+                this.searchPlaceholder.style.display = 'none';
+                this.searchResultsContainer.classList.add('active');
+                this.searchResultsContainer.innerHTML = resultsHtml;
+                
+                console.log('Results container classes:', this.searchResultsContainer.classList);
+                console.log('Results container innerHTML length:', this.searchResultsContainer.innerHTML.length);
+            }
+
+            createSnippet(content, query, maxLength = 200) {
+                const queryLower = query.toLowerCase();
+                const contentLower = content.toLowerCase();
+                const queryIndex = contentLower.indexOf(queryLower);
+                
+                if (queryIndex === -1) {
+                    return this.highlightQuery(content.substring(0, maxLength) + '...', query);
+                }
+
+                const start = Math.max(0, queryIndex - 80);
+                const end = Math.min(content.length, queryIndex + query.length + 120);
+                
+                let snippet = content.substring(start, end);
+                if (start > 0) snippet = '...' + snippet;
+                if (end < content.length) snippet = snippet + '...';
+                
+                return this.highlightQuery(snippet, query);
+            }
+
+            highlightQuery(text, query) {
+                if (!query.trim()) return this.escapeHtml(text);
+                
+                const escapedText = this.escapeHtml(text);
+                const escapedQuery = this.escapeRegex(query);
+                const regex = new RegExp(`(${escapedQuery})`, 'gi');
+                return escapedText.replace(regex, '<mark>$1</mark>');
+            }
+
+            escapeRegex(string) {
+                return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            }
+
+            escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            clearResults() {
+                this.searchStats.textContent = '';
+                this.searchPlaceholder.style.display = 'block';
+                this.searchResultsContainer.classList.remove('active');
+                this.searchResultsContainer.innerHTML = '';
+            }
+
+            showError() {
+                this.searchStats.textContent = '検索中にエラーが発生しました';
+                this.searchResultsContainer.innerHTML = `
+                    <div class="search-no-results">
+                        検索処理中にエラーが発生しました。<br>
+                        しばらくしてから再度お試しください。
+                    </div>
+                `;
+            }
+        }
+
+        // Initialize search when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof lunr === 'undefined') {
+                console.error('Lunr.js is not loaded. Search functionality is disabled.');
+                document.getElementById('search-stats').textContent = '検索機能が利用できません';
+                return;
+            }
+            
+            if (window.searchIndex) {
+                window.searchPage = new SearchPage();
+                window.searchPage.init(window.searchIndex);
+            } else {
+                console.warn('Search index is not available.');
+                document.getElementById('search-stats').textContent = '検索インデックスが利用できません';
+            }
+        });
+    </script>
+</body>
+</html>
