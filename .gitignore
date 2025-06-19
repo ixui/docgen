@@ -44,6 +44,7 @@ example/output/
 test-nested/
 test-nested-output/
 publish/output/
+publish/markdowns/
 output*/
 test-*/
 
