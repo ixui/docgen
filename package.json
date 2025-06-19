@@ -15,11 +15,11 @@
     "url": "https://github.com/ixui/docgen/issues"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "access": "public"
   },
   "scripts": {
     "build": "tsc && npm run copy-assets",
-    "copy-assets": "mkdir -p dist/styles dist/search && cp -r src/styles/* dist/styles/ && cp -r src/search/*.js dist/search/",
+    "copy-assets": "node -e \"const fs=require('fs'),path=require('path');['dist/styles','dist/search'].forEach(d=>fs.mkdirSync(d,{recursive:true}));fs.cpSync('src/styles',path.join('dist','styles'),{recursive:true});fs.readdirSync('src/search').filter(f=>f.endsWith('.js')).forEach(f=>fs.copyFileSync(path.join('src/search',f),path.join('dist/search',f)))\"",
     "dev": "tsc --watch",
     "test": "jest",
     "test:watch": "jest --watch",

@@ -14,27 +14,24 @@ DocGen is a CLI tool that converts Markdown files into beautiful HTML documents 
 
 ## Installation
 
-### From GitHub Packages (Private)
+### From npm (Public)
 
 ```bash
-# Configure npm to use GitHub Packages for @your-company scope
-echo "@your-company:registry=https://npm.pkg.github.com" >> ~/.npmrc
-
-# Authenticate with GitHub (create a personal access token with packages:read scope)
-echo "//npm.pkg.github.com/:_authToken=YOUR_GITHUB_TOKEN" >> ~/.npmrc
-
 # Install globally
-npm install -g @your-company/docgen
+npm install -g @ixui/docgen
 
 # Or install locally in your project
-npm install --save-dev @your-company/docgen
+npm install --save-dev @ixui/docgen
+
+# Or use with npx (no installation required)
+npx @ixui/docgen build ./docs
 ```
 
-### Authentication Setup
+### System Requirements
 
-1. Go to GitHub Settings → Developer settings → Personal access tokens
-2. Generate a new token with `packages:read` scope
-3. Replace `YOUR_GITHUB_TOKEN` in the npmrc configuration above
+- Node.js 18.0.0 or higher
+- NPM 6.0.0 or higher
+- Works on Windows, macOS, and Linux
 
 ## Usage
 
@@ -117,7 +114,7 @@ DocGen automatically generates `index.md` files for directories that don't have 
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-company/docgen.git
+git clone https://github.com/ixui/docgen.git
 cd docgen
 
 # Install dependencies
@@ -183,10 +180,15 @@ DocGen uses CSS-based themes. The default theme provides:
 
 Custom themes can be created by providing a custom CSS file.
 
-## Requirements
+## Cross-Platform Compatibility
 
-- Node.js 18.0.0 or higher
-- NPM or Yarn package manager
+DocGen is tested and works on:
+
+- **Windows** - Windows 10/11 with PowerShell, Command Prompt, or WSL
+- **macOS** - macOS 10.15+ with Terminal or iTerm2
+- **Linux** - Ubuntu, CentOS, Alpine, and other major distributions
+
+The tool automatically handles path separators and file system differences across platforms.
 
 ## License
 
@@ -194,8 +196,14 @@ MIT
 
 ## Support
 
-For issues and feature requests, please use the [GitHub Issues](https://github.com/your-company/docgen/issues) page.
+For issues and feature requests, please use the [GitHub Issues](https://github.com/ixui/docgen/issues) page.
 
-## Internal Usage
+## Contributing
 
-This package is intended for internal company use only. Access is restricted to authorized personnel with appropriate GitHub permissions.
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
