@@ -1,6 +1,6 @@
 {
   "name": "@ixui/docgen",
-  "version": "2.0.9",
+  "version": "2.0.10",
   "description": "CLI tool to convert Markdown files to beautiful HTML documents",
   "main": "dist/cli.js",
   "bin": {
