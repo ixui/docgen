@@ -228,7 +228,7 @@ To create a new release:
 
 1. Update the version in `package.json`
 2. Commit the version change
-3. Create and push a git tag: `git tag v2.0.7 && git push origin v2.0.6`
+3. Create and push a git tag: `git tag v2.0.7 && git push origin v2.0.7`
 4. GitHub Actions will automatically build and create a release with pre-built packages
 
 ## Contributing

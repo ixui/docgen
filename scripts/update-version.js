@@ -34,7 +34,13 @@ function updateReadmeVersion() {
       `git tag v${currentVersion}`
     );
     
-    // Pattern 3: Tarball filenames in URLs (ixui-docgen-2.0.5.tgz)
+    // Pattern 3: Git push origin commands (git push origin v2.0.6)
+    readmeContent = readmeContent.replace(
+      /git push origin v[\d.]+/g,
+      `git push origin v${currentVersion}`
+    );
+    
+    // Pattern 4: Tarball filenames in URLs (ixui-docgen-2.0.5.tgz)
     readmeContent = readmeContent.replace(
       /ixui-docgen-[\d.]+\.tgz/g,
       `ixui-docgen-${currentVersion}.tgz`
