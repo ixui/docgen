@@ -1,0 +1,75 @@
+{
+  "name": "@ixui/docgen",
+  "version": "1.0.0",
+  "description": "CLI tool to convert Markdown files to beautiful HTML documents",
+  "main": "dist/cli.js",
+  "bin": {
+    "docgen": "./dist/cli.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ixui/docgen.git"
+  },
+  "homepage": "https://github.com/ixui/docgen#readme",
+  "bugs": {
+    "url": "https://github.com/ixui/docgen/issues"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "scripts": {
+    "build": "tsc && npm run copy-assets",
+    "copy-assets": "mkdir -p dist/styles dist/search && cp -r src/styles/* dist/styles/ && cp -r src/search/*.js dist/search/",
+    "dev": "tsc --watch",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "lint": "eslint src --ext .ts",
+    "typecheck": "tsc --noEmit",
+    "package": "npm run build && npm pack",
+    "prepare": "npm run build",
+    "example:build": "npm run build && ./dist/cli.js build example/markdowns/ --output example/output/",
+    "example:clean": "rm -rf example/output/",
+    "publish:build": "npm run build && ./dist/cli.js build publish/markdowns/ --output publish/output/",
+    "publish:clean": "rm -rf publish/output/"
+  },
+  "keywords": [
+    "markdown",
+    "html",
+    "documentation",
+    "generator",
+    "cli"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "devDependencies": {
+    "@types/glob": "^8.1.0",
+    "@types/handlebars": "^4.0.40",
+    "@types/jest": "^30.0.0",
+    "@types/lunr": "^2.3.7",
+    "@types/marked": "^5.0.2",
+    "@types/node": "^24.0.3",
+    "@typescript-eslint/eslint-plugin": "^8.34.1",
+    "@typescript-eslint/parser": "^8.34.1",
+    "eslint": "^9.29.0",
+    "eslint-config-prettier": "^10.1.5",
+    "jest": "^30.0.0",
+    "prettier": "^3.5.3",
+    "ts-jest": "^29.4.0",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "commander": "^14.0.0",
+    "glob": "^11.0.3",
+    "handlebars": "^4.7.8",
+    "lunr": "^2.3.9",
+    "marked": "^15.0.12",
+    "tailwindcss": "^4.1.10"
+  }
+}

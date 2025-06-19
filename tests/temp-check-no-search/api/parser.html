@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parser API - DocGen</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="site-title">Parser API</h1>
+        </header>
+        
+        <div class="content-wrapper">
+            <aside class="sidebar">
+                
+      <nav class="toc" aria-label="Table of contents">
+        <h2 class="toc-title">目次</h2>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-1">
+        <a href="#parser-api" class="toc-link">Parser API</a>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-2">
+        <a href="#markdownparser" class="toc-link">MarkdownParser</a>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-3">
+        <a href="#" class="toc-link">コンストラクタ</a>
+        
+      </li>
+    
+      <li class="toc-item toc-level-3">
+        <a href="#" class="toc-link">メソッド</a>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-4">
+        <a href="#parsemarkdown-filename" class="toc-link">parse(markdown, fileName)</a>
+        
+      </li>
+    </ul>
+      </li>
+    </ul>
+      </li>
+    
+      <li class="toc-item toc-level-2">
+        <a href="#heading" class="toc-link">Heading</a>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-3">
+        <a href="#" class="toc-link">プロパティ</a>
+        
+      </li>
+    </ul>
+      </li>
+    </ul>
+      </li>
+    </ul>
+      </nav>
+    
+            </aside>
+            
+            <main class="main-content">
+                <article class="article">
+                    <h1 id="parser-api">Parser API</h1><p>マークダウンパーサーのAPIリファレンス。</p>
+<h2 id="markdownparser">MarkdownParser</h2><h3 id="">コンストラクタ</h3><pre><code class="language-typescript">constructor()
+</code></pre>
+<p>新しいMarkdownParserインスタンスを作成します。</p>
+<h3 id="">メソッド</h3><h4 id="parsemarkdown-filename">parse(markdown, fileName)</h4><p>マークダウンをパースしてHTMLに変換します。</p>
+<p><strong>パラメータ:</strong></p>
+<ul>
+<li><code>markdown</code> (string) - パースするマークダウンテキスト</li>
+<li><code>fileName</code> (string) - ファイル名</li>
+</ul>
+<p><strong>戻り値:</strong></p>
+<p><code>Promise&lt;ParseResult&gt;</code> - パース結果</p>
+<pre><code class="language-typescript">interface ParseResult {
+  html: string;
+  headings: Heading[];
+  metadata: Partial&lt;DocumentMetadata&gt;;
+}
+</code></pre>
+<p><strong>例:</strong></p>
+<pre><code class="language-typescript">const parser = new MarkdownParser();
+const result = await parser.parse(&#39;# タイトル\n内容&#39;, &#39;test.md&#39;);
+console.log(result.html); // &lt;h1 id=&quot;title&quot;&gt;タイトル&lt;/h1&gt;&lt;p&gt;内容&lt;/p&gt;
+</code></pre>
+<h2 id="heading">Heading</h2><p>見出し情報を表すインターフェース。</p>
+<pre><code class="language-typescript">interface Heading {
+  id: string;
+  text: string;
+  level: number;
+  children?: Heading[];
+}
+</code></pre>
+<h3 id="">プロパティ</h3><ul>
+<li><code>id</code> - 見出しのID（アンカーリンク用）</li>
+<li><code>text</code> - 見出しのテキスト</li>
+<li><code>level</code> - 見出しレベル（1-6）</li>
+<li><code>children</code> - 子見出しの配列</li>
+</ul>
+
+                </article>
+                
+                <footer class="article-footer">
+                    <p class="last-modified">最終更新: 2025年6月18日</p>
+                </footer>
+            </main>
+        </div>
+    </div>
+    
+</body>
+</html>

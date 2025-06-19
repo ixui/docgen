@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parser API - DocGen</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="site-title">Parser API</h1>
+            <div class="search-container">
+                <input type="text" id="search-input" class="search-input" placeholder="検索...">
+                <div id="search-results" class="search-results"></div>
+            </div>
+        </header>
+        
+        <div class="content-wrapper">
+            <aside class="sidebar">
+                
+      <nav class="toc" aria-label="Table of contents">
+        <h2 class="toc-title">目次</h2>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-1">
+        <a href="#parser-api" class="toc-link">Parser API</a>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-2">
+        <a href="#markdownparser" class="toc-link">MarkdownParser</a>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-3">
+        <a href="#" class="toc-link">コンストラクタ</a>
+        
+      </li>
+    
+      <li class="toc-item toc-level-3">
+        <a href="#" class="toc-link">メソッド</a>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-4">
+        <a href="#parsemarkdown-filename" class="toc-link">parse(markdown, fileName)</a>
+        
+      </li>
+    </ul>
+      </li>
+    </ul>
+      </li>
+    
+      <li class="toc-item toc-level-2">
+        <a href="#heading" class="toc-link">Heading</a>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-3">
+        <a href="#" class="toc-link">プロパティ</a>
+        
+      </li>
+    </ul>
+      </li>
+    </ul>
+      </li>
+    </ul>
+      </nav>
+    
+            </aside>
+            
+            <main class="main-content">
+                <article class="article">
+                    <h1 id="parser-api">Parser API</h1><p>マークダウンパーサーのAPIリファレンス。</p>
+<h2 id="markdownparser">MarkdownParser</h2><h3 id="">コンストラクタ</h3><pre><code class="language-typescript">constructor()
+</code></pre>
+<p>新しいMarkdownParserインスタンスを作成します。</p>
+<h3 id="">メソッド</h3><h4 id="parsemarkdown-filename">parse(markdown, fileName)</h4><p>マークダウンをパースしてHTMLに変換します。</p>
+<p><strong>パラメータ:</strong></p>
+<ul>
+<li><code>markdown</code> (string) - パースするマークダウンテキスト</li>
+<li><code>fileName</code> (string) - ファイル名</li>
+</ul>
+<p><strong>戻り値:</strong></p>
+<p><code>Promise&lt;ParseResult&gt;</code> - パース結果</p>
+<pre><code class="language-typescript">interface ParseResult {
+  html: string;
+  headings: Heading[];
+  metadata: Partial&lt;DocumentMetadata&gt;;
+}
+</code></pre>
+<p><strong>例:</strong></p>
+<pre><code class="language-typescript">const parser = new MarkdownParser();
+const result = await parser.parse(&#39;# タイトル\n内容&#39;, &#39;test.md&#39;);
+console.log(result.html); // &lt;h1 id=&quot;title&quot;&gt;タイトル&lt;/h1&gt;&lt;p&gt;内容&lt;/p&gt;
+</code></pre>
+<h2 id="heading">Heading</h2><p>見出し情報を表すインターフェース。</p>
+<pre><code class="language-typescript">interface Heading {
+  id: string;
+  text: string;
+  level: number;
+  children?: Heading[];
+}
+</code></pre>
+<h3 id="">プロパティ</h3><ul>
+<li><code>id</code> - 見出しのID（アンカーリンク用）</li>
+<li><code>text</code> - 見出しのテキスト</li>
+<li><code>level</code> - 見出しレベル（1-6）</li>
+<li><code>children</code> - 子見出しの配列</li>
+</ul>
+
+                </article>
+                
+                <footer class="article-footer">
+                    <p class="last-modified">最終更新: 2025年6月18日</p>
+                </footer>
+            </main>
+        </div>
+    </div>
+    
+    <script>
+        // Lunr.js library embedded for local file compatibility
+        /**
+ * A convenience function for configuring and constructing
+ * a new lunr Index.
+ *
+ * A lunr.Builder instance is created and the pipeline setup
+ * with a trimmer, stop word filter and stemmer.
+ *
+ * This builder object is yielded to the configuration function
+ * that is passed as a parameter, allowing the list of fields
+ * and other builder parameters to be customised.
+ *
+ * All documents _must_ be added within the passed config function.
+ *
+ * @example
+ * var idx = lunr(function () {
+ *   this.field('title')
+ *   this.field('body')
+ *   this.ref('id')
+ *
+ *   documents.forEach(function (doc) {
+ *     this.add(doc)
+ *   }, this)
+ * })
+ *
+ * @see {@link lunr.Builder}
+ * @see {@link lunr.Pipeline}
+ * @see {@link lunr.trimmer}
+ * @see {@link lunr.stopWordFilter}
+ * @see {@link lunr.stemmer}
+ * @namespace {function} lunr
+ */
+var lunr = function (config) {
+  var builder = new lunr.Builder
+
+  builder.pipeline.add(
+    lunr.trimmer,
+    lunr.stopWordFilter,
+    lunr.stemmer
+  )
+
+  builder.searchPipeline.add(
+    lunr.stemmer
+  )
+
+  config.call(builder, builder)
+  return builder.build()
+}
+
+lunr.version = "@VERSION"
+
+    </script>
+    <script>
+        // Search index data
+        const searchIndex = {"documents":[{"id":"readme","title":"DocGen テストドキュメント","content":"DocGen テストドキュメント これはDocGenのテスト用ドキュメントセットです。 概要 このドキュメントセットには以下が含まれています： ガイド - 使用方法のガイド API - API リファレンス チュートリアル - ステップバイステップのチュートリアル はじめに DocGenを使って効率的にドキュメントを生成しましょう。 インストール npm install -g docgen 基本的な使用方法 docgen build docs/ -o output/","url":"../fixtures/docs/README.html"},{"id":"getting-started","title":"始めましょう","content":"始めましょう DocGenを使用してドキュメントを生成する方法を学びます。 前提条件 Node.js 18.0.0以上 npm または yarn インストール グローバルインストール npm install -g docgen ローカルインストール npm install --save-dev docgen 最初のドキュメント 1. マークダウンファイルの準備 まず、マークダウンファイルを作成します： # 私のドキュメント これは最初のドキュメントです。 ## セクション1 内容を書きます。 2. HTMLの生成 docgen build my-doc.md 設定 DocGenは設定ファイルをサポートしています。 docgen.config.js module.exports = { theme: &#39;default&#39;, searchEnabled: true, minify: false };","url":"../fixtures/docs/guides/getting-started.html"},{"id":"advanced-usage","title":"高度な使用方法","content":"高度な使用方法 DocGenの高度な機能について説明します。 テーマのカスタマイズ CSSのカスタマイズ 独自のCSSを作成できます： .custom-header { background-color: #2196F3; color: white; } テンプレートのカスタマイズ Handlebarsテンプレートを使用してカスタマイズ： &lt;div class=&quot;custom-layout&quot;&gt; &lt;header&gt;{{metadata.title}}&lt;/header&gt; &lt;main&gt;{{{content}}}&lt;/main&gt; &lt;/div&gt; バッチ処理 複数ファイルの処理 docgen build docs/ --output dist/ ウォッチモード docgen build docs/ --watch プラグイン DocGenはプラグインシステムをサポートします（将来実装予定）。 カスタムプラグイン class CustomPlugin { apply(compiler) { // プラグインロジック } }","url":"../fixtures/docs/guides/advanced-usage.html"},{"id":"basic-tutorial","title":"基本チュートリアル","content":"基本チュートリアル DocGenを使って最初のドキュメントサイトを作成してみましょう。 ステップ 1: プロジェクトの準備 1.1 ディレクトリの作成 mkdir my-docs cd my-docs 1.2 ディレクトリ構造 my-docs/ ├── docs/ │ ├── index.md │ ├── guide.md │ └── api.md └── dist/ ステップ 2: マークダウンファイルの作成 2.1 index.md # 私のプロジェクト これはプロジェクトのメインページです。 ## 概要 このプロジェクトについて説明します。 2.2 guide.md # ガイド 使用方法を説明します。 ## インストール ```bash npm install my-project 使用方法 基本的な使用方法を説明します。 ## ステップ 3: ドキュメントの生成 ### 3.1 基本的な生成 ```bash docgen build docs/ 3.2 出力先の指定 docgen build docs/ --output dist/ 3.3 テーマの指定 docgen build docs/ --theme dark ステップ 4: 結果の確認 生成されたHTMLファイルをブラウザで開いて確認します。 生成されるファイル index.html - メインページ guide.html - ガイドページ api.html - APIページ styles.css - スタイルシート 次のステップ 高度な使用方法 を学ぶ API リファレンス を確認する","url":"../fixtures/docs/tutorials/basic-tutorial.html"},{"id":"advanced-tutorial","title":"高度なチュートリアル","content":"高度なチュートリアル より複雑なドキュメントサイトの構築方法を学びます。 大規模ドキュメントの管理 ディレクトリ構造の設計 docs/ ├── getting-started/ │ ├── installation.md │ ├── quick-start.md │ └── configuration.md ├── guides/ │ ├── basic-usage.md │ ├── advanced-features.md │ └── troubleshooting.md ├── api/ │ ├── core/ │ │ ├── parser.md │ │ └── generator.md │ └── plugins/ │ ├── search.md │ └── themes.md └── examples/ ├── simple-site.md └── complex-site.md 相互参照とリンク 内部リンク 詳細は[APIリファレンス](../api/core/parser.md)を参照してください。 アンカーリンク [概要セクション](#概要)に戻る メタデータの活用 フロントマター（将来実装予定） --- title: &quot;カスタムタイトル&quot; description: &quot;ページの説明&quot; date: 2024-01-01 --- # ページ内容 ここから本文が始まります。 カスタムテーマの作成 テーマディレクトリ構造 themes/ └── custom/ ├── template.hbs ├── styles.css └── search.js カスタムテンプレート &lt;!DOCTYPE html&gt; &lt;html&gt; &lt;head&gt; &lt;title&gt;{{metadata.title}}&lt;/title&gt; &lt;link rel=&quot;stylesheet&quot; href=&quot;styles.css&quot;&gt; &lt;/head&gt; &lt;body&gt; &lt;div class=&quot;custom-wrapper&quot;&gt; &lt;nav&gt;{{{tocHtml}}}&lt;/nav&gt; &lt;main&gt;{{{content}}}&lt;/main&gt; &lt;/div&gt; &lt;/body&gt; &lt;/html&gt; 自動化とCI/CD GitHub Actions name: Build Docs on: push: branches: [main] jobs: build: runs-on: ubuntu-latest steps: - uses: actions/checkout@v2 - name: Setup Node.js uses: actions/setup-node@v2 with: node-version: &#39;18&#39; - name: Install DocGen run: npm install -g docgen - name: Build Documentation run: docgen build docs/ --output dist/ - name: Deploy uses: peaceiris/actions-gh-pages@v3 with: github_token: ${{ secrets.GITHUB_TOKEN }} publish_dir: ./dist","url":"../fixtures/docs/tutorials/advanced-tutorial.html"},{"id":"parser","title":"Parser API","content":"Parser API マークダウンパーサーのAPIリファレンス。 MarkdownParser コンストラクタ constructor() 新しいMarkdownParserインスタンスを作成します。 メソッド parse(markdown, fileName) マークダウンをパースしてHTMLに変換します。 パラメータ: markdown (string) - パースするマークダウンテキスト fileName (string) - ファイル名 戻り値: Promise&lt;ParseResult&gt; - パース結果 interface ParseResult { html: string; headings: Heading[]; metadata: Partial&lt;DocumentMetadata&gt;; } 例: const parser = new MarkdownParser(); const result = await parser.parse(&#39;# タイトル\\n内容&#39;, &#39;test.md&#39;); console.log(result.html); // &lt;h1 id=&quot;title&quot;&gt;タイトル&lt;/h1&gt;&lt;p&gt;内容&lt;/p&gt; Heading 見出し情報を表すインターフェース。 interface Heading { id: string; text: string; level: number; children?: Heading[]; } プロパティ id - 見出しのID（アンカーリンク用） text - 見出しのテキスト level - 見出しレベル（1-6） children - 子見出しの配列","url":"../fixtures/docs/api/parser.html"},{"id":"generator","title":"Generator API","content":"Generator API HTML生成とTOC生成のAPIリファレンス。 HtmlGenerator HTMLを生成するクラス。 メソッド loadTemplate(themeName) テーマテンプレートを読み込みます。 パラメータ: themeName (string) - テーマ名 戻り値: Promise&lt;void&gt; generate(document, options) ドキュメントからHTMLを生成します。 パラメータ: document (ProcessedDocument) - 処理済みドキュメント options (HtmlGeneratorOptions) - 生成オプション 戻り値: Promise&lt;string&gt; - 生成されたHTML TocGenerator 目次を生成するクラス。 メソッド generate(headings) 見出しから目次を生成します。 パラメータ: headings (Heading[]) - 見出しの配列 戻り値: TableOfContents - 目次オブジェクト 例: const tocGenerator = new TocGenerator(); const toc = tocGenerator.generate(headings); renderTocHtml(toc) 目次をHTMLとしてレンダリングします。 パラメータ: toc (TableOfContents) - 目次オブジェクト 戻り値: string - レンダリングされたHTML TableOfContents interface TableOfContents { items: TocItem[]; } interface TocItem { id: string; text: string; level: number; children: TocItem[]; }","url":"../fixtures/docs/api/generator.html"}],"index":"{\"version\":\"2.3.9\",\"fields\":[\"title\",\"content\"],\"fieldVectors\":[[\"title/readme\",[0,1.784,1,9.996]],[\"content/readme\",[0,0.381,1,1.606,2,2.311,3,1.606,4,2.311,5,1.606,6,2.311,7,0.352,8,1.606,9,2.311,10,2.311,11,2.311,12,2.311,13,1.141,14,0.794,15,0.794,16,1.141,17,2.311,18,0.517,19,0.794,20,2.311,21,2.311]],[\"title/getting-started\",[22,13.259]],[\"content/getting-started\",[0,0.354,13,0.969,14,0.98,15,0.88,16,0.969,18,0.439,22,1.364,23,1.963,24,1.963,25,1.364,26,1.963,27,1.963,28,1.963,29,1.963,30,1.963,31,1.963,32,1.963,33,1.963,34,1.963,35,1.963,36,1.963,37,0.969,38,1.963,39,1.963,40,1.364,41,1.963,42,1.963,43,1.963,44,1.963,45,1.364,46,1.963,47,1.963,48,1.963,49,1.963,50,1.963,51,0.969,52,0.675,53,1.963,54,1.963,55,1.963,56,1.963,57,1.963,58,1.963,59,1.963]],[\"title/advanced-usage\",[60,9.423]],[\"content/advanced-usage\",[0,0.322,18,0.58,19,0.891,52,0.989,60,0.988,61,2.001,62,2.001,63,2.001,64,2.001,65,2.001,66,2.001,67,2.001,68,2.593,69,2.001,70,2.001,71,1.421,72,2.001,73,2.001,74,1.39,75,1.39,76,2.001,77,2.001,78,1.39,79,1.39,80,2.001,81,2.001,82,0.988,83,0.988,84,2.001,85,2.001,86,2.001,87,2.001,88,2.001,89,2.001,90,2.001,91,2.001,92,1.39,93,2.001]],[\"title/basic-tutorial\",[94,13.259]],[\"content/basic-tutorial\",[0,0.307,3,1.039,5,1.039,7,0.185,8,1.039,13,0.738,14,0.514,15,0.514,18,0.554,19,0.979,37,1.05,40,1.72,45,1.873,60,0.738,82,0.738,83,1.05,94,1.039,95,1.495,96,2.696,97,1.495,98,1.495,99,1.495,100,1.495,101,1.495,102,1.478,103,1.495,104,1.495,105,1.495,106,1.72,107,1.72,108,2.127,109,2.127,110,1.478,111,1.495,112,1.495,113,1.495,114,1.495,115,1.495,116,1.495,117,1.495,118,1.495,119,1.495,120,2.127,121,1.495,122,1.495,123,1.495,124,1.495,125,1.495,126,1.495,127,1.495,128,1.495,129,1.495,130,1.495,131,1.495,132,1.495,133,1.495,134,1.495,135,1.495,136,1.495,137,1.495,138,1.495,139,1.495,140,1.495,141,1.495,142,1.495,143,1.495,144,1.495,145,1.039,146,1.495,147,1.495,148,1.495,149,1.495]],[\"title/advanced-tutorial\",[150,13.259]],[\"content/advanced-tutorial\",[0,0.26,14,0.387,15,0.592,16,0.555,18,0.469,19,0.592,25,0.781,37,0.555,74,0.781,75,0.781,78,0.781,79,0.781,82,0.555,83,0.555,102,0.781,106,2.178,107,2.201,110,2.043,145,0.781,150,0.781,151,1.125,152,1.125,153,1.125,154,1.125,155,1.125,156,1.125,157,1.125,158,1.125,159,1.125,160,1.125,161,1.125,162,1.125,163,1.125,164,1.125,165,1.125,166,1.125,167,1.125,168,1.125,169,1.125,170,1.125,171,1.125,172,1.125,173,1.125,174,1.125,175,1.723,176,1.125,177,1.125,178,1.125,179,1.125,180,1.125,181,1.125,182,1.125,183,1.125,184,1.125,185,1.125,186,1.125,187,1.125,188,1.125,189,1.125,190,1.723,191,1.125,192,1.125,193,1.125,194,1.125,195,1.125,196,1.125,197,1.125,198,1.125,199,1.125,200,1.125,201,1.125,202,1.125,203,1.125,204,1.125,205,1.125,206,1.125,207,1.125,208,1.125,209,1.125,210,1.125,211,1.125,212,1.125,213,1.125,214,1.125,215,1.125,216,1.125,217,2.531,218,1.723,219,1.125,220,1.125,221,1.125,222,1.125,223,1.125,224,1.125,225,1.125,226,1.125,227,1.125,228,2.095,229,1.125,230,1.125,231,1.125,232,1.125,233,1.723,234,1.125,235,1.125,236,1.125,237,1.723,238,1.125,239,1.125,240,1.125,241,1.125,242,1.125,243,1.125,244,1.125,245,1.125,246,1.125,247,1.125,248,1.125]],[\"title/parser\",[7,1.784,249,9.996]],[\"content/parser\",[7,0.213,51,1.156,52,0.805,71,1.156,92,1.192,249,1.627,250,1.716,251,1.716,252,1.716,253,1.716,254,1.716,255,1.192,256,1.716,257,1.716,258,1.716,259,1.192,260,1.716,261,1.627,262,1.716,263,1.716,264,1.716,265,1.192,266,1.716,267,1.716,268,1.627,269,1.716,270,1.716,271,1.851,272,1.716,273,2.341,274,1.716,275,1.716,276,1.192,277,1.627,278,1.192,279,1.716,280,1.716,281,1.716,282,1.716,283,1.716,284,1.716,285,1.716,286,1.716,287,1.716,288,2.341,289,1.716,290,1.192,291,1.192,292,1.192,293,1.192,294,1.716,295,1.716,296,1.716,297,1.716,298,1.716,299,1.716,300,1.716,301,1.716,302,1.716,303,1.716,304,1.716]],[\"title/generator\",[7,1.784,305,9.996]],[\"content/generator\",[7,0.207,51,1.135,52,0.79,71,1.135,255,1.597,259,1.967,261,1.16,265,1.967,268,1.597,271,1.597,276,1.16,277,1.597,278,1.16,290,1.16,291,1.16,292,1.16,293,1.16,305,1.16,306,1.67,307,1.67,308,1.67,309,1.67,310,1.67,311,1.67,312,1.67,313,1.67,314,1.67,315,1.67,316,1.67,317,1.67,318,1.67,319,1.67,320,1.67,321,1.67,322,1.67,323,1.67,324,1.67,325,2.298,326,1.67,327,1.67,328,1.67,329,1.67,330,1.67,331,1.67,332,2.627,333,2.298,334,1.67,335,2.298,336,1.67,337,1.67,338,1.67,339,1.67,340,1.67,341,1.67,342,1.67,343,2.298,344,1.67,345,1.67]]],\"invertedIndex\":[[\"#\",{\"_index\":37,\"title\":{},\"content\":{\"getting-started\":{},\"basic-tutorial\":{},\"advanced-tutorial\":{}}}],[\"##\",{\"_index\":40,\"title\":{},\"content\":{\"getting-started\":{},\"basic-tutorial\":{}}}],[\"###\",{\"_index\":126,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"#2196f3;\",{\"_index\":69,\"title\":{},\"content\":{\"advanced-usage\":{}}}],[\"${{\",{\"_index\":244,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"&#39;18&#39;\",{\"_index\":236,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"&#39;default&#39;,\",{\"_index\":54,\"title\":{},\"content\":{\"getting-started\":{}}}],[\"&#39;test.md&#39;);\",{\"_index\":284,\"title\":{},\"content\":{\"parser\":{}}}],[\"&lt;!doctype\",{\"_index\":200,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"&lt;/body&gt;\",{\"_index\":212,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"&lt;/div&gt;\",{\"_index\":79,\"title\":{},\"content\":{\"advanced-usage\":{},\"advanced-tutorial\":{}}}],[\"&lt;/head&gt;\",{\"_index\":208,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"&lt;/html&gt;\",{\"_index\":213,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"&lt;body&gt;\",{\"_index\":209,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"&lt;div\",{\"_index\":74,\"title\":{},\"content\":{\"advanced-usage\":{},\"advanced-tutorial\":{}}}],[\"&lt;h1\",{\"_index\":286,\"title\":{},\"content\":{\"parser\":{}}}],[\"&lt;head&gt;\",{\"_index\":203,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"&lt;header&gt;{{metadata.title}}&lt;/header&gt;\",{\"_index\":77,\"title\":{},\"content\":{\"advanced-usage\":{}}}],[\"&lt;html&gt;\",{\"_index\":202,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"&lt;link\",{\"_index\":205,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"&lt;main&gt;{{{content}}}&lt;/main&gt;\",{\"_index\":78,\"title\":{},\"content\":{\"advanced-usage\":{},\"advanced-tutorial\":{}}}],[\"&lt;nav&gt;{{{tochtml}}}&lt;/nav&gt;\",{\"_index\":211,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"&lt;title&gt;{{metadata.title}}&lt;/title&gt;\",{\"_index\":204,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"&quot;カスタムタイトル&quot;\",{\"_index\":185,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"&quot;ページの説明&quot;\",{\"_index\":187,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"(heading[])\",{\"_index\":330,\"title\":{},\"content\":{\"generator\":{}}}],[\"(htmlgeneratoroptions)\",{\"_index\":321,\"title\":{},\"content\":{\"generator\":{}}}],[\"(processeddocument)\",{\"_index\":318,\"title\":{},\"content\":{\"generator\":{}}}],[\"(string)\",{\"_index\":261,\"title\":{},\"content\":{\"parser\":{},\"generator\":{}}}],[\"(tableofcontents)\",{\"_index\":339,\"title\":{},\"content\":{\"generator\":{}}}],[\"./dist\",{\"_index\":248,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\".custom\",{\"_index\":65,\"title\":{},\"content\":{\"advanced-usage\":{}}}],[\"//\",{\"_index\":92,\"title\":{},\"content\":{\"advanced-usage\":{},\"parser\":{}}}],[\"01\",{\"_index\":190,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"1.\",{\"_index\":34,\"title\":{},\"content\":{\"getting-started\":{}}}],[\"1.1\",{\"_index\":99,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"1.2\",{\"_index\":104,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"18.0.0以上\",{\"_index\":26,\"title\":{},\"content\":{\"getting-started\":{}}}],[\"1:\",{\"_index\":97,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"2.\",{\"_index\":43,\"title\":{},\"content\":{\"getting-started\":{}}}],[\"2.1\",{\"_index\":114,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"2.2\",{\"_index\":118,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"2024\",{\"_index\":189,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"2:\",{\"_index\":112,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"3.1\",{\"_index\":127,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"3.2\",{\"_index\":129,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"3.3\",{\"_index\":131,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"3:\",{\"_index\":124,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"4:\",{\"_index\":135,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"6）\",{\"_index\":302,\"title\":{},\"content\":{\"parser\":{}}}],[\"=\",{\"_index\":51,\"title\":{},\"content\":{\"getting-started\":{},\"parser\":{},\"generator\":{}}}],[\"[main]\",{\"_index\":221,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"[概要セクション](#概要)に戻る\",{\"_index\":181,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"```bash\",{\"_index\":120,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"actions\",{\"_index\":216,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"actions/checkout@v2\",{\"_index\":229,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"actions/setup\",{\"_index\":231,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"advanced\",{\"_index\":163,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"api\",{\"_index\":7,\"title\":{\"parser\":{},\"generator\":{}},\"content\":{\"readme\":{},\"basic-tutorial\":{},\"parser\":{},\"generator\":{}}}],[\"api.html\",{\"_index\":143,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"api.md\",{\"_index\":111,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"api/\",{\"_index\":166,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"apiページ\",{\"_index\":144,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"apply(compiler)\",{\"_index\":91,\"title\":{},\"content\":{\"advanced-usage\":{}}}],[\"await\",{\"_index\":281,\"title\":{},\"content\":{\"parser\":{}}}],[\"background\",{\"_index\":67,\"title\":{},\"content\":{\"advanced-usage\":{}}}],[\"basic\",{\"_index\":161,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"branches:\",{\"_index\":220,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"build\",{\"_index\":18,\"title\":{},\"content\":{\"readme\":{},\"getting-started\":{},\"advanced-usage\":{},\"basic-tutorial\":{},\"advanced-tutorial\":{}}}],[\"build:\",{\"_index\":223,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"cd\",{\"_index\":103,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"children\",{\"_index\":303,\"title\":{},\"content\":{\"parser\":{}}}],[\"children:\",{\"_index\":345,\"title\":{},\"content\":{\"generator\":{}}}],[\"children?:\",{\"_index\":294,\"title\":{},\"content\":{\"parser\":{}}}],[\"class\",{\"_index\":89,\"title\":{},\"content\":{\"advanced-usage\":{}}}],[\"class=&quot;custom\",{\"_index\":75,\"title\":{},\"content\":{\"advanced-usage\":{},\"advanced-tutorial\":{}}}],[\"color:\",{\"_index\":68,\"title\":{},\"content\":{\"advanced-usage\":{}}}],[\"complex\",{\"_index\":176,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"configuration.md\",{\"_index\":159,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"console.log(result.html);\",{\"_index\":285,\"title\":{},\"content\":{\"parser\":{}}}],[\"const\",{\"_index\":277,\"title\":{},\"content\":{\"parser\":{},\"generator\":{}}}],[\"constructor()\",{\"_index\":253,\"title\":{},\"content\":{\"parser\":{}}}],[\"core/\",{\"_index\":167,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"cssのカスタマイズ\",{\"_index\":63,\"title\":{},\"content\":{\"advanced-usage\":{}}}],[\"custom/\",{\"_index\":196,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"customplugin\",{\"_index\":90,\"title\":{},\"content\":{\"advanced-usage\":{}}}],[\"dark\",{\"_index\":134,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"date:\",{\"_index\":188,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"deploy\",{\"_index\":239,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"description:\",{\"_index\":186,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"dev\",{\"_index\":32,\"title\":{},\"content\":{\"getting-started\":{}}}],[\"dist/\",{\"_index\":83,\"title\":{},\"content\":{\"advanced-usage\":{},\"basic-tutorial\":{},\"advanced-tutorial\":{}}}],[\"doc.md\",{\"_index\":46,\"title\":{},\"content\":{\"getting-started\":{}}}],[\"docgen\",{\"_index\":0,\"title\":{\"readme\":{}},\"content\":{\"readme\":{},\"getting-started\":{},\"advanced-usage\":{},\"basic-tutorial\":{},\"advanced-tutorial\":{}}}],[\"docgen.config.js\",{\"_index\":49,\"title\":{},\"content\":{\"getting-started\":{}}}],[\"docgenの高度な機能について説明します。\",{\"_index\":61,\"title\":{},\"content\":{\"advanced-usage\":{}}}],[\"docgenはプラグインシステムをサポートします（将来実装予定）。\",{\"_index\":87,\"title\":{},\"content\":{\"advanced-usage\":{}}}],[\"docgenは設定ファイルをサポートしています。\",{\"_index\":48,\"title\":{},\"content\":{\"getting-started\":{}}}],[\"docgenを使って効率的にドキュメントを生成しましょう。\",{\"_index\":12,\"title\":{},\"content\":{\"readme\":{}}}],[\"docgenを使って最初のドキュメントサイトを作成してみましょう。\",{\"_index\":95,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"docgenを使用してドキュメントを生成する方法を学びます。\",{\"_index\":23,\"title\":{},\"content\":{\"getting-started\":{}}}],[\"docs\",{\"_index\":102,\"title\":{},\"content\":{\"basic-tutorial\":{},\"advanced-tutorial\":{}}}],[\"docs/\",{\"_index\":19,\"title\":{},\"content\":{\"readme\":{},\"advanced-usage\":{},\"basic-tutorial\":{},\"advanced-tutorial\":{}}}],[\"document\",{\"_index\":317,\"title\":{},\"content\":{\"generator\":{}}}],[\"documentation\",{\"_index\":238,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"examples/\",{\"_index\":173,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"false\",{\"_index\":58,\"title\":{},\"content\":{\"getting-started\":{}}}],[\"features.md\",{\"_index\":164,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"filename\",{\"_index\":263,\"title\":{},\"content\":{\"parser\":{}}}],[\"filename)\",{\"_index\":257,\"title\":{},\"content\":{\"parser\":{}}}],[\"g\",{\"_index\":16,\"title\":{},\"content\":{\"readme\":{},\"getting-started\":{},\"advanced-tutorial\":{}}}],[\"generate(document,\",{\"_index\":314,\"title\":{},\"content\":{\"generator\":{}}}],[\"generate(headings)\",{\"_index\":327,\"title\":{},\"content\":{\"generator\":{}}}],[\"generator\",{\"_index\":305,\"title\":{\"generator\":{}},\"content\":{\"generator\":{}}}],[\"generator.md\",{\"_index\":169,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"getting\",{\"_index\":154,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"gh\",{\"_index\":241,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"github\",{\"_index\":215,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"github_token:\",{\"_index\":243,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"guide.html\",{\"_index\":141,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"guide.md\",{\"_index\":109,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"guides/\",{\"_index\":160,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"handlebarsテンプレートを使用してカスタマイズ：\",{\"_index\":73,\"title\":{},\"content\":{\"advanced-usage\":{}}}],[\"header\",{\"_index\":66,\"title\":{},\"content\":{\"advanced-usage\":{}}}],[\"heading\",{\"_index\":288,\"title\":{},\"content\":{\"parser\":{}}}],[\"heading[];\",{\"_index\":273,\"title\":{},\"content\":{\"parser\":{}}}],[\"headings\",{\"_index\":329,\"title\":{},\"content\":{\"generator\":{}}}],[\"headings:\",{\"_index\":272,\"title\":{},\"content\":{\"parser\":{}}}],[\"href=&quot;styles.css&quot;&gt;\",{\"_index\":207,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"html&gt;\",{\"_index\":201,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"html:\",{\"_index\":270,\"title\":{},\"content\":{\"parser\":{}}}],[\"htmlgenerator\",{\"_index\":307,\"title\":{},\"content\":{\"generator\":{}}}],[\"htmlの生成\",{\"_index\":44,\"title\":{},\"content\":{\"getting-started\":{}}}],[\"htmlを生成するクラス。\",{\"_index\":308,\"title\":{},\"content\":{\"generator\":{}}}],[\"html生成とtoc生成のapiリファレンス。\",{\"_index\":306,\"title\":{},\"content\":{\"generator\":{}}}],[\"id\",{\"_index\":296,\"title\":{},\"content\":{\"parser\":{}}}],[\"id:\",{\"_index\":290,\"title\":{},\"content\":{\"parser\":{},\"generator\":{}}}],[\"id=&quot;title&quot;&gt;タイトル&lt;/h1&gt;&lt;p&gt;内容&lt;/p&gt;\",{\"_index\":287,\"title\":{},\"content\":{\"parser\":{}}}],[\"index.html\",{\"_index\":139,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"index.md\",{\"_index\":108,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"install\",{\"_index\":15,\"title\":{},\"content\":{\"readme\":{},\"getting-started\":{},\"basic-tutorial\":{},\"advanced-tutorial\":{}}}],[\"installation.md\",{\"_index\":156,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"interface\",{\"_index\":268,\"title\":{},\"content\":{\"parser\":{},\"generator\":{}}}],[\"items:\",{\"_index\":342,\"title\":{},\"content\":{\"generator\":{}}}],[\"jobs:\",{\"_index\":222,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"latest\",{\"_index\":226,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"layout&quot;&gt;\",{\"_index\":76,\"title\":{},\"content\":{\"advanced-usage\":{}}}],[\"level\",{\"_index\":300,\"title\":{},\"content\":{\"parser\":{}}}],[\"level:\",{\"_index\":292,\"title\":{},\"content\":{\"parser\":{},\"generator\":{}}}],[\"loadtemplate(themename)\",{\"_index\":309,\"title\":{},\"content\":{\"generator\":{}}}],[\"markdown\",{\"_index\":260,\"title\":{},\"content\":{\"parser\":{}}}],[\"markdownparser\",{\"_index\":251,\"title\":{},\"content\":{\"parser\":{}}}],[\"markdownparser();\",{\"_index\":279,\"title\":{},\"content\":{\"parser\":{}}}],[\"metadata:\",{\"_index\":274,\"title\":{},\"content\":{\"parser\":{}}}],[\"minify:\",{\"_index\":57,\"title\":{},\"content\":{\"getting-started\":{}}}],[\"mkdir\",{\"_index\":101,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"module.exports\",{\"_index\":50,\"title\":{},\"content\":{\"getting-started\":{}}}],[\"my\",{\"_index\":45,\"title\":{},\"content\":{\"getting-started\":{},\"basic-tutorial\":{}}}],[\"name:\",{\"_index\":217,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"new\",{\"_index\":278,\"title\":{},\"content\":{\"parser\":{},\"generator\":{}}}],[\"node\",{\"_index\":234,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"node.js\",{\"_index\":25,\"title\":{},\"content\":{\"getting-started\":{},\"advanced-tutorial\":{}}}],[\"node@v2\",{\"_index\":232,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"npm\",{\"_index\":14,\"title\":{},\"content\":{\"readme\":{},\"getting-started\":{},\"basic-tutorial\":{},\"advanced-tutorial\":{}}}],[\"number;\",{\"_index\":293,\"title\":{},\"content\":{\"parser\":{},\"generator\":{}}}],[\"o\",{\"_index\":20,\"title\":{},\"content\":{\"readme\":{}}}],[\"on:\",{\"_index\":218,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"options\",{\"_index\":320,\"title\":{},\"content\":{\"generator\":{}}}],[\"options)\",{\"_index\":315,\"title\":{},\"content\":{\"generator\":{}}}],[\"output\",{\"_index\":82,\"title\":{},\"content\":{\"advanced-usage\":{},\"basic-tutorial\":{},\"advanced-tutorial\":{}}}],[\"output/\",{\"_index\":21,\"title\":{},\"content\":{\"readme\":{}}}],[\"pages@v3\",{\"_index\":242,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"parse(markdown,\",{\"_index\":256,\"title\":{},\"content\":{\"parser\":{}}}],[\"parser\",{\"_index\":249,\"title\":{\"parser\":{}},\"content\":{\"parser\":{}}}],[\"parser.md\",{\"_index\":168,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"parser.parse(&#39;#\",{\"_index\":282,\"title\":{},\"content\":{\"parser\":{}}}],[\"parseresult\",{\"_index\":269,\"title\":{},\"content\":{\"parser\":{}}}],[\"partial&lt;documentmetadata&gt;;\",{\"_index\":275,\"title\":{},\"content\":{\"parser\":{}}}],[\"peaceiris/actions\",{\"_index\":240,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"plugins/\",{\"_index\":170,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"project\",{\"_index\":121,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"promise&lt;parseresult&gt;\",{\"_index\":266,\"title\":{},\"content\":{\"parser\":{}}}],[\"promise&lt;string&gt;\",{\"_index\":323,\"title\":{},\"content\":{\"generator\":{}}}],[\"promise&lt;void&gt;\",{\"_index\":313,\"title\":{},\"content\":{\"generator\":{}}}],[\"publish_dir:\",{\"_index\":247,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"push:\",{\"_index\":219,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"quick\",{\"_index\":157,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"rel=&quot;stylesheet&quot;\",{\"_index\":206,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"rendertochtml(toc)\",{\"_index\":337,\"title\":{},\"content\":{\"generator\":{}}}],[\"result\",{\"_index\":280,\"title\":{},\"content\":{\"parser\":{}}}],[\"run:\",{\"_index\":237,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"runs\",{\"_index\":224,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"save\",{\"_index\":31,\"title\":{},\"content\":{\"getting-started\":{}}}],[\"search.js\",{\"_index\":198,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"search.md\",{\"_index\":171,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"searchenabled:\",{\"_index\":55,\"title\":{},\"content\":{\"getting-started\":{}}}],[\"secrets.github_token\",{\"_index\":245,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"setup\",{\"_index\":230,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"simple\",{\"_index\":174,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"site.md\",{\"_index\":175,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"start.md\",{\"_index\":158,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"started/\",{\"_index\":155,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"steps:\",{\"_index\":227,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"string\",{\"_index\":340,\"title\":{},\"content\":{\"generator\":{}}}],[\"string;\",{\"_index\":271,\"title\":{},\"content\":{\"parser\":{},\"generator\":{}}}],[\"styles.css\",{\"_index\":145,\"title\":{},\"content\":{\"basic-tutorial\":{},\"advanced-tutorial\":{}}}],[\"tableofcontents\",{\"_index\":332,\"title\":{},\"content\":{\"generator\":{}}}],[\"template.hbs\",{\"_index\":197,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"text\",{\"_index\":298,\"title\":{},\"content\":{\"parser\":{}}}],[\"text:\",{\"_index\":291,\"title\":{},\"content\":{\"parser\":{},\"generator\":{}}}],[\"theme\",{\"_index\":133,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"theme:\",{\"_index\":53,\"title\":{},\"content\":{\"getting-started\":{}}}],[\"themename\",{\"_index\":311,\"title\":{},\"content\":{\"generator\":{}}}],[\"themes.md\",{\"_index\":172,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"themes/\",{\"_index\":195,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"title:\",{\"_index\":184,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"toc\",{\"_index\":335,\"title\":{},\"content\":{\"generator\":{}}}],[\"tocgenerator\",{\"_index\":325,\"title\":{},\"content\":{\"generator\":{}}}],[\"tocgenerator();\",{\"_index\":334,\"title\":{},\"content\":{\"generator\":{}}}],[\"tocgenerator.generate(headings);\",{\"_index\":336,\"title\":{},\"content\":{\"generator\":{}}}],[\"tocitem\",{\"_index\":344,\"title\":{},\"content\":{\"generator\":{}}}],[\"tocitem[];\",{\"_index\":343,\"title\":{},\"content\":{\"generator\":{}}}],[\"troubleshooting.md\",{\"_index\":165,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"true,\",{\"_index\":56,\"title\":{},\"content\":{\"getting-started\":{}}}],[\"ubuntu\",{\"_index\":225,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"usage.md\",{\"_index\":162,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"uses:\",{\"_index\":228,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"version:\",{\"_index\":235,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"watch\",{\"_index\":85,\"title\":{},\"content\":{\"advanced-usage\":{}}}],[\"white;\",{\"_index\":70,\"title\":{},\"content\":{\"advanced-usage\":{}}}],[\"with:\",{\"_index\":233,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"wrapper&quot;&gt;\",{\"_index\":210,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"yarn\",{\"_index\":28,\"title\":{},\"content\":{\"getting-started\":{}}}],[\"{\",{\"_index\":52,\"title\":{},\"content\":{\"getting-started\":{},\"advanced-usage\":{},\"parser\":{},\"generator\":{}}}],[\"}\",{\"_index\":71,\"title\":{},\"content\":{\"advanced-usage\":{},\"parser\":{},\"generator\":{}}}],[\"};\",{\"_index\":59,\"title\":{},\"content\":{\"getting-started\":{}}}],[\"}}\",{\"_index\":246,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"│\",{\"_index\":107,\"title\":{},\"content\":{\"basic-tutorial\":{},\"advanced-tutorial\":{}}}],[\"└──\",{\"_index\":110,\"title\":{},\"content\":{\"basic-tutorial\":{},\"advanced-tutorial\":{}}}],[\"├──\",{\"_index\":106,\"title\":{},\"content\":{\"basic-tutorial\":{},\"advanced-tutorial\":{}}}],[\"ここから本文が始まります。\",{\"_index\":192,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"このドキュメントセットには以下が含まれています：\",{\"_index\":4,\"title\":{},\"content\":{\"readme\":{}}}],[\"このプロジェクトについて説明します。\",{\"_index\":117,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"これはdocgenのテスト用ドキュメントセットです。\",{\"_index\":2,\"title\":{},\"content\":{\"readme\":{}}}],[\"これはプロジェクトのメインページです。\",{\"_index\":116,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"これは最初のドキュメントです。\",{\"_index\":39,\"title\":{},\"content\":{\"getting-started\":{}}}],[\"はじめに\",{\"_index\":11,\"title\":{},\"content\":{\"readme\":{}}}],[\"まず、マークダウンファイルを作成します：\",{\"_index\":36,\"title\":{},\"content\":{\"getting-started\":{}}}],[\"または\",{\"_index\":27,\"title\":{},\"content\":{\"getting-started\":{}}}],[\"より複雑なドキュメントサイトの構築方法を学びます。\",{\"_index\":151,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"を学ぶ\",{\"_index\":148,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"を確認する\",{\"_index\":149,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"アンカーリンク\",{\"_index\":180,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"インストール\",{\"_index\":13,\"title\":{},\"content\":{\"readme\":{},\"getting-started\":{},\"basic-tutorial\":{}}}],[\"ウォッチモード\",{\"_index\":84,\"title\":{},\"content\":{\"advanced-usage\":{}}}],[\"カスタムテンプレート\",{\"_index\":199,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"カスタムテーマの作成\",{\"_index\":193,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"カスタムプラグイン\",{\"_index\":88,\"title\":{},\"content\":{\"advanced-usage\":{}}}],[\"ガイド\",{\"_index\":5,\"title\":{},\"content\":{\"readme\":{},\"basic-tutorial\":{}}}],[\"ガイドページ\",{\"_index\":142,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"グローバルインストール\",{\"_index\":29,\"title\":{},\"content\":{\"getting-started\":{}}}],[\"コンストラクタ\",{\"_index\":252,\"title\":{},\"content\":{\"parser\":{}}}],[\"スタイルシート\",{\"_index\":146,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"ステップ\",{\"_index\":96,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"ステップバイステップのチュートリアル\",{\"_index\":10,\"title\":{},\"content\":{\"readme\":{}}}],[\"セクション1\",{\"_index\":41,\"title\":{},\"content\":{\"getting-started\":{}}}],[\"タイトル\\\\n内容&#39;,\",{\"_index\":283,\"title\":{},\"content\":{\"parser\":{}}}],[\"チュートリアル\",{\"_index\":9,\"title\":{},\"content\":{\"readme\":{}}}],[\"テストドキュメント\",{\"_index\":1,\"title\":{\"readme\":{}},\"content\":{\"readme\":{}}}],[\"テンプレートのカスタマイズ\",{\"_index\":72,\"title\":{},\"content\":{\"advanced-usage\":{}}}],[\"テーマのカスタマイズ\",{\"_index\":62,\"title\":{},\"content\":{\"advanced-usage\":{}}}],[\"テーマの指定\",{\"_index\":132,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"テーマテンプレートを読み込みます。\",{\"_index\":310,\"title\":{},\"content\":{\"generator\":{}}}],[\"テーマディレクトリ構造\",{\"_index\":194,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"テーマ名\",{\"_index\":312,\"title\":{},\"content\":{\"generator\":{}}}],[\"ディレクトリの作成\",{\"_index\":100,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"ディレクトリ構造\",{\"_index\":105,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"ディレクトリ構造の設計\",{\"_index\":153,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"ドキュメントからhtmlを生成します。\",{\"_index\":316,\"title\":{},\"content\":{\"generator\":{}}}],[\"ドキュメントの生成\",{\"_index\":125,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"バッチ処理\",{\"_index\":80,\"title\":{},\"content\":{\"advanced-usage\":{}}}],[\"パラメータ:\",{\"_index\":259,\"title\":{},\"content\":{\"parser\":{},\"generator\":{}}}],[\"パースするマークダウンテキスト\",{\"_index\":262,\"title\":{},\"content\":{\"parser\":{}}}],[\"パース結果\",{\"_index\":267,\"title\":{},\"content\":{\"parser\":{}}}],[\"ファイル名\",{\"_index\":264,\"title\":{},\"content\":{\"parser\":{}}}],[\"フロントマター（将来実装予定）\",{\"_index\":183,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"プラグイン\",{\"_index\":86,\"title\":{},\"content\":{\"advanced-usage\":{}}}],[\"プラグインロジック\",{\"_index\":93,\"title\":{},\"content\":{\"advanced-usage\":{}}}],[\"プロジェクトの準備\",{\"_index\":98,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"プロパティ\",{\"_index\":295,\"title\":{},\"content\":{\"parser\":{}}}],[\"ページ内容\",{\"_index\":191,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"マークダウンをパースしてhtmlに変換します。\",{\"_index\":258,\"title\":{},\"content\":{\"parser\":{}}}],[\"マークダウンパーサーのapiリファレンス。\",{\"_index\":250,\"title\":{},\"content\":{\"parser\":{}}}],[\"マークダウンファイルの作成\",{\"_index\":113,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"マークダウンファイルの準備\",{\"_index\":35,\"title\":{},\"content\":{\"getting-started\":{}}}],[\"メインページ\",{\"_index\":140,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"メソッド\",{\"_index\":255,\"title\":{},\"content\":{\"parser\":{},\"generator\":{}}}],[\"メタデータの活用\",{\"_index\":182,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"リファレンス\",{\"_index\":8,\"title\":{},\"content\":{\"readme\":{},\"basic-tutorial\":{}}}],[\"レンダリングされたhtml\",{\"_index\":341,\"title\":{},\"content\":{\"generator\":{}}}],[\"ローカルインストール\",{\"_index\":30,\"title\":{},\"content\":{\"getting-started\":{}}}],[\"使用方法\",{\"_index\":122,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"使用方法のガイド\",{\"_index\":6,\"title\":{},\"content\":{\"readme\":{}}}],[\"使用方法を説明します。\",{\"_index\":119,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"例:\",{\"_index\":276,\"title\":{},\"content\":{\"parser\":{},\"generator\":{}}}],[\"内容を書きます。\",{\"_index\":42,\"title\":{},\"content\":{\"getting-started\":{}}}],[\"内部リンク\",{\"_index\":178,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"処理済みドキュメント\",{\"_index\":319,\"title\":{},\"content\":{\"generator\":{}}}],[\"出力先の指定\",{\"_index\":130,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"前提条件\",{\"_index\":24,\"title\":{},\"content\":{\"getting-started\":{}}}],[\"基本チュートリアル\",{\"_index\":94,\"title\":{\"basic-tutorial\":{}},\"content\":{\"basic-tutorial\":{}}}],[\"基本的な使用方法\",{\"_index\":17,\"title\":{},\"content\":{\"readme\":{}}}],[\"基本的な使用方法を説明します。\",{\"_index\":123,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"基本的な生成\",{\"_index\":128,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"大規模ドキュメントの管理\",{\"_index\":152,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"始めましょう\",{\"_index\":22,\"title\":{\"getting-started\":{}},\"content\":{\"getting-started\":{}}}],[\"子見出しの配列\",{\"_index\":304,\"title\":{},\"content\":{\"parser\":{}}}],[\"戻り値:\",{\"_index\":265,\"title\":{},\"content\":{\"parser\":{},\"generator\":{}}}],[\"新しいmarkdownparserインスタンスを作成します。\",{\"_index\":254,\"title\":{},\"content\":{\"parser\":{}}}],[\"最初のドキュメント\",{\"_index\":33,\"title\":{},\"content\":{\"getting-started\":{}}}],[\"概要\",{\"_index\":3,\"title\":{},\"content\":{\"readme\":{},\"basic-tutorial\":{}}}],[\"次のステップ\",{\"_index\":147,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"独自のcssを作成できます：\",{\"_index\":64,\"title\":{},\"content\":{\"advanced-usage\":{}}}],[\"生成されたhtml\",{\"_index\":324,\"title\":{},\"content\":{\"generator\":{}}}],[\"生成されたhtmlファイルをブラウザで開いて確認します。\",{\"_index\":137,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"生成されるファイル\",{\"_index\":138,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"生成オプション\",{\"_index\":322,\"title\":{},\"content\":{\"generator\":{}}}],[\"目次をhtmlとしてレンダリングします。\",{\"_index\":338,\"title\":{},\"content\":{\"generator\":{}}}],[\"目次を生成するクラス。\",{\"_index\":326,\"title\":{},\"content\":{\"generator\":{}}}],[\"目次オブジェクト\",{\"_index\":333,\"title\":{},\"content\":{\"generator\":{}}}],[\"相互参照とリンク\",{\"_index\":177,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"私のドキュメント\",{\"_index\":38,\"title\":{},\"content\":{\"getting-started\":{}}}],[\"私のプロジェクト\",{\"_index\":115,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"結果の確認\",{\"_index\":136,\"title\":{},\"content\":{\"basic-tutorial\":{}}}],[\"自動化とci/cd\",{\"_index\":214,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"複数ファイルの処理\",{\"_index\":81,\"title\":{},\"content\":{\"advanced-usage\":{}}}],[\"見出しから目次を生成します。\",{\"_index\":328,\"title\":{},\"content\":{\"generator\":{}}}],[\"見出しのid（アンカーリンク用）\",{\"_index\":297,\"title\":{},\"content\":{\"parser\":{}}}],[\"見出しのテキスト\",{\"_index\":299,\"title\":{},\"content\":{\"parser\":{}}}],[\"見出しの配列\",{\"_index\":331,\"title\":{},\"content\":{\"generator\":{}}}],[\"見出しレベル（1\",{\"_index\":301,\"title\":{},\"content\":{\"parser\":{}}}],[\"見出し情報を表すインターフェース。\",{\"_index\":289,\"title\":{},\"content\":{\"parser\":{}}}],[\"設定\",{\"_index\":47,\"title\":{},\"content\":{\"getting-started\":{}}}],[\"詳細は[apiリファレンス](../api/core/parser.md)を参照してください。\",{\"_index\":179,\"title\":{},\"content\":{\"advanced-tutorial\":{}}}],[\"高度なチュートリアル\",{\"_index\":150,\"title\":{\"advanced-tutorial\":{}},\"content\":{\"advanced-tutorial\":{}}}],[\"高度な使用方法\",{\"_index\":60,\"title\":{\"advanced-usage\":{}},\"content\":{\"advanced-usage\":{},\"basic-tutorial\":{}}}]],\"pipeline\":[]}"};
+    </script>
+    <script>
+        // Search client functionality
+        // Client-side search functionality
+class DocGenSearch {
+  constructor() {
+    this.searchIndex = null;
+    this.documents = [];
+    this.searchInput = null;
+    this.searchResults = null;
+    this.isInitialized = false;
+  }
+
+  init(indexData) {
+    if (!indexData || !indexData.index || !indexData.documents) {
+      console.warn('Search index data is not available');
+      return;
+    }
+
+    try {
+      this.searchIndex = lunr.Index.load(JSON.parse(indexData.index));
+      this.documents = indexData.documents;
+      this.setupUI();
+      this.isInitialized = true;
+      console.log(`Search initialized with ${this.documents.length} documents`);
+    } catch (error) {
+      console.error('Failed to initialize search:', error);
+    }
+  }
+
+  setupUI() {
+    this.searchInput = document.getElementById('search-input');
+    this.searchResults = document.getElementById('search-results');
+
+    if (!this.searchInput || !this.searchResults) {
+      console.warn('Search UI elements not found');
+      return;
+    }
+
+    // Add event listeners
+    this.searchInput.addEventListener('input', (e) => {
+      this.performSearch(e.target.value);
+    });
+
+    this.searchInput.addEventListener('focus', () => {
+      if (this.searchInput.value.trim()) {
+        this.searchResults.style.display = 'block';
+      }
+    });
+
+    // Hide results when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!this.searchInput.contains(e.target) && !this.searchResults.contains(e.target)) {
+        this.searchResults.style.display = 'none';
+      }
+    });
+
+    // Handle keyboard navigation
+    this.searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        this.searchResults.style.display = 'none';
+        this.searchInput.blur();
+      }
+    });
+  }
+
+  performSearch(query) {
+    if (!this.isInitialized || !query.trim()) {
+      this.searchResults.style.display = 'none';
+      return;
+    }
+
+    try {
+      const results = this.searchIndex.search(query);
+      this.displayResults(results, query);
+    } catch (error) {
+      console.error('Search error:', error);
+      this.searchResults.style.display = 'none';
+    }
+  }
+
+  displayResults(results, query) {
+    if (results.length === 0) {
+      this.searchResults.innerHTML = '<div class="search-no-results">検索結果が見つかりません</div>';
+      this.searchResults.style.display = 'block';
+      return;
+    }
+
+    const resultsHtml = results.slice(0, 10).map(result => {
+      const doc = this.documents.find(d => d.id === result.ref);
+      if (!doc) return '';
+
+      const snippet = this.createSnippet(doc.content, query);
+      
+      return `
+        <div class="search-result">
+          <a href="${this.getDocumentUrl(doc.url)}" class="search-result-title">
+            ${this.highlightQuery(doc.title, query)}
+          </a>
+          <div class="search-result-snippet">
+            ${snippet}
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    this.searchResults.innerHTML = resultsHtml;
+    this.searchResults.style.display = 'block';
+  }
+
+  createSnippet(content, query, maxLength = 150) {
+    const queryLower = query.toLowerCase();
+    const contentLower = content.toLowerCase();
+    const queryIndex = contentLower.indexOf(queryLower);
+    
+    if (queryIndex === -1) {
+      return content.substring(0, maxLength) + '...';
+    }
+
+    const start = Math.max(0, queryIndex - 50);
+    const end = Math.min(content.length, queryIndex + query.length + 100);
+    
+    let snippet = content.substring(start, end);
+    if (start > 0) snippet = '...' + snippet;
+    if (end < content.length) snippet = snippet + '...';
+    
+    return this.highlightQuery(snippet, query);
+  }
+
+  highlightQuery(text, query) {
+    if (!query.trim()) return text;
+    
+    const regex = new RegExp(`(${this.escapeRegex(query)})`, 'gi');
+    return text.replace(regex, '<mark>$1</mark>');
+  }
+
+  escapeRegex(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  getDocumentUrl(url) {
+    // Handle relative URLs based on current page location
+    const currentLocation = window.location;
+    
+    // If URL is already absolute or starts with protocol, return as-is
+    if (url.startsWith('http') || url.startsWith('file://') || url.startsWith('/')) {
+      return url;
+    }
+    
+    // For file:// protocol, handle paths differently
+    if (currentLocation.protocol === 'file:') {
+      const currentPath = currentLocation.pathname;
+      const currentDir = currentPath.substring(0, currentPath.lastIndexOf('/') + 1);
+      
+      // Count directory depth to calculate relative path
+      const pathParts = currentPath.split('/').filter(part => part.length > 0);
+      const depth = pathParts.length - 1; // Subtract 1 for the filename
+      
+      if (depth > 0) {
+        // We're in a subdirectory, need to go up
+        const upLevels = '../'.repeat(depth);
+        return upLevels + url;
+      }
+      
+      return url;
+    }
+    
+    // For http/https protocols, use standard relative path calculation
+    const currentPath = currentLocation.pathname;
+    const currentDepth = (currentPath.match(/\//g) || []).length - 1;
+    if (currentDepth > 1) {
+      // We're in a subdirectory, need to go up
+      const upLevels = '../'.repeat(currentDepth - 1);
+      return upLevels + url;
+    }
+    
+    return url;
+  }
+}
+
+// Initialize search when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+  if (typeof searchIndex !== 'undefined' && window.lunr) {
+    window.docgenSearch = new DocGenSearch();
+    window.docgenSearch.init(searchIndex);
+  }
+});
+    </script>
+</body>
+</html>

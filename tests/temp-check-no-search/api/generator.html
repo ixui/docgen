@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator API - DocGen</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="site-title">Generator API</h1>
+        </header>
+        
+        <div class="content-wrapper">
+            <aside class="sidebar">
+                
+      <nav class="toc" aria-label="Table of contents">
+        <h2 class="toc-title">目次</h2>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-1">
+        <a href="#generator-api" class="toc-link">Generator API</a>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-2">
+        <a href="#htmlgenerator" class="toc-link">HtmlGenerator</a>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-3">
+        <a href="#" class="toc-link">メソッド</a>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-4">
+        <a href="#loadtemplatethemename" class="toc-link">loadTemplate(themeName)</a>
+        
+      </li>
+    
+      <li class="toc-item toc-level-4">
+        <a href="#generatedocument-options" class="toc-link">generate(document, options)</a>
+        
+      </li>
+    </ul>
+      </li>
+    </ul>
+      </li>
+    
+      <li class="toc-item toc-level-2">
+        <a href="#tocgenerator" class="toc-link">TocGenerator</a>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-3">
+        <a href="#" class="toc-link">メソッド</a>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-4">
+        <a href="#generateheadings" class="toc-link">generate(headings)</a>
+        
+      </li>
+    
+      <li class="toc-item toc-level-4">
+        <a href="#rendertochtmltoc" class="toc-link">renderTocHtml(toc)</a>
+        
+      </li>
+    </ul>
+      </li>
+    </ul>
+      </li>
+    
+      <li class="toc-item toc-level-2">
+        <a href="#tableofcontents" class="toc-link">TableOfContents</a>
+        
+      </li>
+    </ul>
+      </li>
+    </ul>
+      </nav>
+    
+            </aside>
+            
+            <main class="main-content">
+                <article class="article">
+                    <h1 id="generator-api">Generator API</h1><p>HTML生成とTOC生成のAPIリファレンス。</p>
+<h2 id="htmlgenerator">HtmlGenerator</h2><p>HTMLを生成するクラス。</p>
+<h3 id="">メソッド</h3><h4 id="loadtemplatethemename">loadTemplate(themeName)</h4><p>テーマテンプレートを読み込みます。</p>
+<p><strong>パラメータ:</strong></p>
+<ul>
+<li><code>themeName</code> (string) - テーマ名</li>
+</ul>
+<p><strong>戻り値:</strong></p>
+<p><code>Promise&lt;void&gt;</code></p>
+<h4 id="generatedocument-options">generate(document, options)</h4><p>ドキュメントからHTMLを生成します。</p>
+<p><strong>パラメータ:</strong></p>
+<ul>
+<li><code>document</code> (ProcessedDocument) - 処理済みドキュメント</li>
+<li><code>options</code> (HtmlGeneratorOptions) - 生成オプション</li>
+</ul>
+<p><strong>戻り値:</strong></p>
+<p><code>Promise&lt;string&gt;</code> - 生成されたHTML</p>
+<h2 id="tocgenerator">TocGenerator</h2><p>目次を生成するクラス。</p>
+<h3 id="">メソッド</h3><h4 id="generateheadings">generate(headings)</h4><p>見出しから目次を生成します。</p>
+<p><strong>パラメータ:</strong></p>
+<ul>
+<li><code>headings</code> (Heading[]) - 見出しの配列</li>
+</ul>
+<p><strong>戻り値:</strong></p>
+<p><code>TableOfContents</code> - 目次オブジェクト</p>
+<p><strong>例:</strong></p>
+<pre><code class="language-typescript">const tocGenerator = new TocGenerator();
+const toc = tocGenerator.generate(headings);
+</code></pre>
+<h4 id="rendertochtmltoc">renderTocHtml(toc)</h4><p>目次をHTMLとしてレンダリングします。</p>
+<p><strong>パラメータ:</strong></p>
+<ul>
+<li><code>toc</code> (TableOfContents) - 目次オブジェクト</li>
+</ul>
+<p><strong>戻り値:</strong></p>
+<p><code>string</code> - レンダリングされたHTML</p>
+<h2 id="tableofcontents">TableOfContents</h2><pre><code class="language-typescript">interface TableOfContents {
+  items: TocItem[];
+}
+
+interface TocItem {
+  id: string;
+  text: string;
+  level: number;
+  children: TocItem[];
+}
+</code></pre>
+
+                </article>
+                
+                <footer class="article-footer">
+                    <p class="last-modified">最終更新: 2025年6月18日</p>
+                </footer>
+            </main>
+        </div>
+    </div>
+    
+</body>
+</html>

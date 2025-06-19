@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高度な使用方法 - DocGen</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="site-title">高度な使用方法</h1>
+        </header>
+        
+        <div class="content-wrapper">
+            <aside class="sidebar">
+                
+      <nav class="toc" aria-label="Table of contents">
+        <h2 class="toc-title">目次</h2>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-1">
+        <a href="#" class="toc-link">高度な使用方法</a>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-2">
+        <a href="#" class="toc-link">テーマのカスタマイズ</a>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-3">
+        <a href="#css" class="toc-link">CSSのカスタマイズ</a>
+        
+      </li>
+    
+      <li class="toc-item toc-level-3">
+        <a href="#" class="toc-link">テンプレートのカスタマイズ</a>
+        
+      </li>
+    </ul>
+      </li>
+    
+      <li class="toc-item toc-level-2">
+        <a href="#" class="toc-link">バッチ処理</a>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-3">
+        <a href="#" class="toc-link">複数ファイルの処理</a>
+        
+      </li>
+    
+      <li class="toc-item toc-level-3">
+        <a href="#" class="toc-link">ウォッチモード</a>
+        
+      </li>
+    </ul>
+      </li>
+    
+      <li class="toc-item toc-level-2">
+        <a href="#" class="toc-link">プラグイン</a>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-3">
+        <a href="#" class="toc-link">カスタムプラグイン</a>
+        
+      </li>
+    </ul>
+      </li>
+    </ul>
+      </li>
+    </ul>
+      </nav>
+    
+            </aside>
+            
+            <main class="main-content">
+                <article class="article">
+                    <h1 id="">高度な使用方法</h1><p>DocGenの高度な機能について説明します。</p>
+<h2 id="">テーマのカスタマイズ</h2><h3 id="css">CSSのカスタマイズ</h3><p>独自のCSSを作成できます：</p>
+<pre><code class="language-css">.custom-header {
+  background-color: #2196F3;
+  color: white;
+}
+</code></pre>
+<h3 id="">テンプレートのカスタマイズ</h3><p>Handlebarsテンプレートを使用してカスタマイズ：</p>
+<pre><code class="language-handlebars">&lt;div class=&quot;custom-layout&quot;&gt;
+  &lt;header&gt;{{metadata.title}}&lt;/header&gt;
+  &lt;main&gt;{{{content}}}&lt;/main&gt;
+&lt;/div&gt;
+</code></pre>
+<h2 id="">バッチ処理</h2><h3 id="">複数ファイルの処理</h3><pre><code class="language-bash">docgen build docs/ --output dist/
+</code></pre>
+<h3 id="">ウォッチモード</h3><pre><code class="language-bash">docgen build docs/ --watch
+</code></pre>
+<h2 id="">プラグイン</h2><p>DocGenはプラグインシステムをサポートします（将来実装予定）。</p>
+<h3 id="">カスタムプラグイン</h3><pre><code class="language-javascript">class CustomPlugin {
+  apply(compiler) {
+    // プラグインロジック
+  }
+}
+</code></pre>
+
+                </article>
+                
+                <footer class="article-footer">
+                    <p class="last-modified">最終更新: 2025年6月18日</p>
+                </footer>
+            </main>
+        </div>
+    </div>
+    
+</body>
+</html>

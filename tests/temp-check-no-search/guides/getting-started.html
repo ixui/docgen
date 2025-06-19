@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>始めましょう - DocGen</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="site-title">始めましょう</h1>
+        </header>
+        
+        <div class="content-wrapper">
+            <aside class="sidebar">
+                
+      <nav class="toc" aria-label="Table of contents">
+        <h2 class="toc-title">目次</h2>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-1">
+        <a href="#" class="toc-link">始めましょう</a>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-2">
+        <a href="#" class="toc-link">前提条件</a>
+        
+      </li>
+    
+      <li class="toc-item toc-level-2">
+        <a href="#" class="toc-link">インストール</a>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-3">
+        <a href="#" class="toc-link">グローバルインストール</a>
+        
+      </li>
+    
+      <li class="toc-item toc-level-3">
+        <a href="#" class="toc-link">ローカルインストール</a>
+        
+      </li>
+    </ul>
+      </li>
+    
+      <li class="toc-item toc-level-2">
+        <a href="#" class="toc-link">最初のドキュメント</a>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-3">
+        <a href="#1-" class="toc-link">1. マークダウンファイルの準備</a>
+        
+      </li>
+    
+      <li class="toc-item toc-level-3">
+        <a href="#2-html" class="toc-link">2. HTMLの生成</a>
+        
+      </li>
+    </ul>
+      </li>
+    
+      <li class="toc-item toc-level-2">
+        <a href="#" class="toc-link">設定</a>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-3">
+        <a href="#docgenconfigjs" class="toc-link">docgen.config.js</a>
+        
+      </li>
+    </ul>
+      </li>
+    </ul>
+      </li>
+    </ul>
+      </nav>
+    
+            </aside>
+            
+            <main class="main-content">
+                <article class="article">
+                    <h1 id="">始めましょう</h1><p>DocGenを使用してドキュメントを生成する方法を学びます。</p>
+<h2 id="">前提条件</h2><ul>
+<li>Node.js 18.0.0以上</li>
+<li>npm または yarn</li>
+</ul>
+<h2 id="">インストール</h2><h3 id="">グローバルインストール</h3><pre><code class="language-bash">npm install -g docgen
+</code></pre>
+<h3 id="">ローカルインストール</h3><pre><code class="language-bash">npm install --save-dev docgen
+</code></pre>
+<h2 id="">最初のドキュメント</h2><h3 id="1-">1. マークダウンファイルの準備</h3><p>まず、マークダウンファイルを作成します：</p>
+<pre><code class="language-markdown"># 私のドキュメント
+
+これは最初のドキュメントです。
+
+## セクション1
+
+内容を書きます。
+</code></pre>
+<h3 id="2-html">2. HTMLの生成</h3><pre><code class="language-bash">docgen build my-doc.md
+</code></pre>
+<h2 id="">設定</h2><p>DocGenは設定ファイルをサポートしています。</p>
+<h3 id="docgenconfigjs">docgen.config.js</h3><pre><code class="language-javascript">module.exports = {
+  theme: &#39;default&#39;,
+  searchEnabled: true,
+  minify: false
+};
+</code></pre>
+
+                </article>
+                
+                <footer class="article-footer">
+                    <p class="last-modified">最終更新: 2025年6月18日</p>
+                </footer>
+            </main>
+        </div>
+    </div>
+    
+</body>
+</html>

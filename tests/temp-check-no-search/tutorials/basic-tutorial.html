@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>基本チュートリアル - DocGen</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="site-title">基本チュートリアル</h1>
+        </header>
+        
+        <div class="content-wrapper">
+            <aside class="sidebar">
+                
+      <nav class="toc" aria-label="Table of contents">
+        <h2 class="toc-title">目次</h2>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-1">
+        <a href="#" class="toc-link">基本チュートリアル</a>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-2">
+        <a href="#-1-" class="toc-link">ステップ 1: プロジェクトの準備</a>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-3">
+        <a href="#11-" class="toc-link">1.1 ディレクトリの作成</a>
+        
+      </li>
+    
+      <li class="toc-item toc-level-3">
+        <a href="#12-" class="toc-link">1.2 ディレクトリ構造</a>
+        
+      </li>
+    </ul>
+      </li>
+    
+      <li class="toc-item toc-level-2">
+        <a href="#-2-" class="toc-link">ステップ 2: マークダウンファイルの作成</a>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-3">
+        <a href="#21-indexmd" class="toc-link">2.1 index.md</a>
+        
+      </li>
+    
+      <li class="toc-item toc-level-3">
+        <a href="#22-guidemd" class="toc-link">2.2 guide.md</a>
+        
+      </li>
+    </ul>
+      </li>
+    
+      <li class="toc-item toc-level-2">
+        <a href="#" class="toc-link">使用方法</a>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-3">
+        <a href="#32-" class="toc-link">3.2 出力先の指定</a>
+        
+      </li>
+    
+      <li class="toc-item toc-level-3">
+        <a href="#33-" class="toc-link">3.3 テーマの指定</a>
+        
+      </li>
+    </ul>
+      </li>
+    
+      <li class="toc-item toc-level-2">
+        <a href="#-4-" class="toc-link">ステップ 4: 結果の確認</a>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-3">
+        <a href="#" class="toc-link">生成されるファイル</a>
+        
+      </li>
+    </ul>
+      </li>
+    
+      <li class="toc-item toc-level-2">
+        <a href="#" class="toc-link">次のステップ</a>
+        
+      </li>
+    </ul>
+      </li>
+    </ul>
+      </nav>
+    
+            </aside>
+            
+            <main class="main-content">
+                <article class="article">
+                    <h1 id="">基本チュートリアル</h1><p>DocGenを使って最初のドキュメントサイトを作成してみましょう。</p>
+<h2 id="-1-">ステップ 1: プロジェクトの準備</h2><h3 id="11-">1.1 ディレクトリの作成</h3><pre><code class="language-bash">mkdir my-docs
+cd my-docs
+</code></pre>
+<h3 id="12-">1.2 ディレクトリ構造</h3><pre><code>my-docs/
+├── docs/
+│   ├── index.md
+│   ├── guide.md
+│   └── api.md
+└── dist/
+</code></pre>
+<h2 id="-2-">ステップ 2: マークダウンファイルの作成</h2><h3 id="21-indexmd">2.1 index.md</h3><pre><code class="language-markdown"># 私のプロジェクト
+
+これはプロジェクトのメインページです。
+
+## 概要
+
+このプロジェクトについて説明します。
+</code></pre>
+<h3 id="22-guidemd">2.2 guide.md</h3><pre><code class="language-markdown"># ガイド
+
+使用方法を説明します。
+
+## インストール
+
+```bash
+npm install my-project
+</code></pre>
+<h2 id="">使用方法</h2><p>基本的な使用方法を説明します。</p>
+<pre><code>
+## ステップ 3: ドキュメントの生成
+
+### 3.1 基本的な生成
+
+```bash
+docgen build docs/
+</code></pre>
+<h3 id="32-">3.2 出力先の指定</h3><pre><code class="language-bash">docgen build docs/ --output dist/
+</code></pre>
+<h3 id="33-">3.3 テーマの指定</h3><pre><code class="language-bash">docgen build docs/ --theme dark
+</code></pre>
+<h2 id="-4-">ステップ 4: 結果の確認</h2><p>生成されたHTMLファイルをブラウザで開いて確認します。</p>
+<h3 id="">生成されるファイル</h3><ul>
+<li><code>index.html</code> - メインページ</li>
+<li><code>guide.html</code> - ガイドページ</li>
+<li><code>api.html</code> - APIページ</li>
+<li><code>styles.css</code> - スタイルシート</li>
+</ul>
+<h2 id="">次のステップ</h2><ul>
+<li><a href="../guides/advanced-usage.md">高度な使用方法</a>を学ぶ</li>
+<li><a href="../api/">API リファレンス</a>を確認する</li>
+</ul>
+
+                </article>
+                
+                <footer class="article-footer">
+                    <p class="last-modified">最終更新: 2025年6月18日</p>
+                </footer>
+            </main>
+        </div>
+    </div>
+    
+</body>
+</html>

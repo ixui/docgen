@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高度なチュートリアル - DocGen</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="site-title">高度なチュートリアル</h1>
+        </header>
+        
+        <div class="content-wrapper">
+            <aside class="sidebar">
+                
+      <nav class="toc" aria-label="Table of contents">
+        <h2 class="toc-title">目次</h2>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-1">
+        <a href="#" class="toc-link">高度なチュートリアル</a>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-2">
+        <a href="#" class="toc-link">大規模ドキュメントの管理</a>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-3">
+        <a href="#" class="toc-link">ディレクトリ構造の設計</a>
+        
+      </li>
+    </ul>
+      </li>
+    
+      <li class="toc-item toc-level-2">
+        <a href="#" class="toc-link">相互参照とリンク</a>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-3">
+        <a href="#" class="toc-link">内部リンク</a>
+        
+      </li>
+    
+      <li class="toc-item toc-level-3">
+        <a href="#" class="toc-link">アンカーリンク</a>
+        
+      </li>
+    </ul>
+      </li>
+    
+      <li class="toc-item toc-level-2">
+        <a href="#" class="toc-link">メタデータの活用</a>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-3">
+        <a href="#" class="toc-link">フロントマター（将来実装予定）</a>
+        
+      </li>
+    </ul>
+      </li>
+    
+      <li class="toc-item toc-level-2">
+        <a href="#" class="toc-link">カスタムテーマの作成</a>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-3">
+        <a href="#" class="toc-link">テーマディレクトリ構造</a>
+        
+      </li>
+    
+      <li class="toc-item toc-level-3">
+        <a href="#" class="toc-link">カスタムテンプレート</a>
+        
+      </li>
+    </ul>
+      </li>
+    
+      <li class="toc-item toc-level-2">
+        <a href="#cicd" class="toc-link">自動化とCI/CD</a>
+        <ul class="toc-list">
+      <li class="toc-item toc-level-3">
+        <a href="#github-actions" class="toc-link">GitHub Actions</a>
+        
+      </li>
+    </ul>
+      </li>
+    </ul>
+      </li>
+    </ul>
+      </nav>
+    
+            </aside>
+            
+            <main class="main-content">
+                <article class="article">
+                    <h1 id="">高度なチュートリアル</h1><p>より複雑なドキュメントサイトの構築方法を学びます。</p>
+<h2 id="">大規模ドキュメントの管理</h2><h3 id="">ディレクトリ構造の設計</h3><pre><code>docs/
+├── getting-started/
+│   ├── installation.md
+│   ├── quick-start.md
+│   └── configuration.md
+├── guides/
+│   ├── basic-usage.md
+│   ├── advanced-features.md
+│   └── troubleshooting.md
+├── api/
+│   ├── core/
+│   │   ├── parser.md
+│   │   └── generator.md
+│   └── plugins/
+│       ├── search.md
+│       └── themes.md
+└── examples/
+    ├── simple-site.md
+    └── complex-site.md
+</code></pre>
+<h2 id="">相互参照とリンク</h2><h3 id="">内部リンク</h3><pre><code class="language-markdown">詳細は[APIリファレンス](../api/core/parser.md)を参照してください。
+</code></pre>
+<h3 id="">アンカーリンク</h3><pre><code class="language-markdown">[概要セクション](#概要)に戻る
+</code></pre>
+<h2 id="">メタデータの活用</h2><h3 id="">フロントマター（将来実装予定）</h3><pre><code class="language-yaml">---
+title: &quot;カスタムタイトル&quot;
+description: &quot;ページの説明&quot;
+date: 2024-01-01
+---
+
+# ページ内容
+
+ここから本文が始まります。
+</code></pre>
+<h2 id="">カスタムテーマの作成</h2><h3 id="">テーマディレクトリ構造</h3><pre><code>themes/
+└── custom/
+    ├── template.hbs
+    ├── styles.css
+    └── search.js
+</code></pre>
+<h3 id="">カスタムテンプレート</h3><pre><code class="language-handlebars">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;{{metadata.title}}&lt;/title&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;styles.css&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class=&quot;custom-wrapper&quot;&gt;
+        &lt;nav&gt;{{{tocHtml}}}&lt;/nav&gt;
+        &lt;main&gt;{{{content}}}&lt;/main&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h2 id="cicd">自動化とCI/CD</h2><h3 id="github-actions">GitHub Actions</h3><pre><code class="language-yaml">name: Build Docs
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: &#39;18&#39;
+      - name: Install DocGen
+        run: npm install -g docgen
+      - name: Build Documentation
+        run: docgen build docs/ --output dist/
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+</code></pre>
+
+                </article>
+                
+                <footer class="article-footer">
+                    <p class="last-modified">最終更新: 2025年6月18日</p>
+                </footer>
+            </main>
+        </div>
+    </div>
+    
+</body>
+</html>
