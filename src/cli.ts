@@ -4,6 +4,7 @@ import { Command } from 'commander';
 import { version } from '../package.json';
 import { DocGenOptions } from './types';
 import { DocumentProcessor } from './processor/document-processor';
+import { PathUtils } from './utils/path-utils';
 
 const program = new Command();
 
@@ -22,8 +23,8 @@ program
   .option('-m, --minify', 'Minify output', false)
   .action(async (input: string, options: { output?: string; theme?: string; search?: boolean; watch?: boolean; minify?: boolean }) => {
     const fullOptions: DocGenOptions = {
-      input,
-      output: options.output ?? './dist',
+      input: PathUtils.normalizePath(input),
+      output: PathUtils.normalizePath(options.output ?? './dist'),
       theme: options.theme ?? 'default',
       searchEnabled: options.search !== false,
       watch: options.watch ?? false,

@@ -1,6 +1,18 @@
 import * as path from 'path';
 
 export class PathUtils {
+  public static normalizePath(inputPath: string): string {
+    // Convert Windows paths to Unix-style paths when running on WSL/Linux
+    if (process.platform === 'linux' && /^[A-Za-z]:\\/.test(inputPath)) {
+      // Convert C:\ to /mnt/c/
+      const driveLetter = inputPath.charAt(0).toLowerCase();
+      const pathWithoutDrive = inputPath.substring(3).replace(/\\/g, '/');
+      return `/mnt/${driveLetter}/${pathWithoutDrive}`;
+    }
+    
+    // For other cases, just normalize the path
+    return path.normalize(inputPath);
+  }
   public static getRelativePath(from: string, to: string): string {
     return path.relative(path.dirname(from), to);
   }
