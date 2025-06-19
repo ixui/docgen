@@ -282,9 +282,15 @@ describe('Multiple Files Integration', () => {
         // All files should have CSS link (may be relative)
         expect(content).toMatch(/href="[\.\/]*styles\.css"/);
         
-        // No files should contain processing errors
+        // No files should contain processing errors in the rendered content
         expect(content).not.toContain('[object Object]');
-        expect(content).not.toContain('undefined');
+        
+        // Check for undefined only in non-script portions
+        // Extract content outside of script tags
+        const nonScriptContent = content.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+        // Check that rendered content doesn't contain 'undefined'
+        // (it's OK for JavaScript code to contain 'undefined')
+        expect(nonScriptContent).not.toContain('undefined');
         
         // All files should have TOC structure (even if empty)
         expect(content).toContain('class="sidebar"');
