@@ -75,7 +75,15 @@ class DocGenSearch {
     }
 
     try {
-      const results = this.searchIndex.search(query);
+      // 元のクエリと部分一致クエリの両方で検索
+      let searchQuery = query.trim();
+      
+      // ワイルドカード検索とファジー検索を追加
+      if (!searchQuery.includes('*') && !searchQuery.includes('~')) {
+        searchQuery = `${searchQuery}* ${searchQuery}~1 ${searchQuery}`;
+      }
+      
+      const results = this.searchIndex.search(searchQuery);
       this.displayResults(results, query);
     } catch (error) {
       console.error('Search error:', error);

@@ -38,6 +38,10 @@ export class SearchIndexer {
       builder.field('title', { boost: 10 });
       builder.field('content');
 
+      // 語幹変換を無効化して完全一致検索を改善
+      builder.pipeline.remove(lunr.stemmer);
+      builder.searchPipeline.remove(lunr.stemmer);
+
       documents.forEach(doc => {
         builder.add(doc);
       });
@@ -71,9 +75,45 @@ export class SearchIndexer {
 
   private extractTextContent(html: string): string {
     // Remove HTML tags and get plain text
-    return html
+    let text = html
       .replace(/<[^>]*>/g, ' ')
       .replace(/\s+/g, ' ')
       .trim();
+    
+    // Add Japanese text processing for better search
+    text = this.enhanceJapaneseText(text);
+    
+    return text;
+  }
+
+  private enhanceJapaneseText(text: string): string {
+    // Create N-grams for Japanese text to improve partial matching
+    const words = text.split(/\s+/);
+    const enhancedWords: string[] = [];
+    
+    words.forEach(word => {
+      enhancedWords.push(word);
+      
+      // Generate bi-grams and tri-grams for Japanese characters
+      if (this.containsJapanese(word) && word.length > 2) {
+        // Bi-grams
+        for (let i = 0; i < word.length - 1; i++) {
+          enhancedWords.push(word.substring(i, i + 2));
+        }
+        // Tri-grams for longer words
+        if (word.length > 3) {
+          for (let i = 0; i < word.length - 2; i++) {
+            enhancedWords.push(word.substring(i, i + 3));
+          }
+        }
+      }
+    });
+    
+    return enhancedWords.join(' ');
+  }
+
+  private containsJapanese(text: string): boolean {
+    // Check for Hiragana, Katakana, and Kanji characters
+    return /[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]/.test(text);
   }
 }
