@@ -30,7 +30,9 @@
     "example:build": "npm run build && ./dist/cli.js build example/markdowns/ --output example/output/",
     "example:clean": "rm -rf example/output/",
     "publish:build": "npm run build && ./dist/cli.js build publish/markdowns/ --output publish/output/",
-    "publish:clean": "rm -rf publish/output/"
+    "publish:clean": "rm -rf publish/output/",
+    "version": "node scripts/update-version.js && git add README.md",
+    "postversion": "echo \"✅ Version updated to $(node -p 'require(\\\"./package.json\\\").version'). Ready to push tags with: git push --follow-tags\""
   },
   "keywords": [
     "markdown",
