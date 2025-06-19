@@ -284,7 +284,13 @@ describe('Multiple Files Integration', () => {
         expect(content).toContain('</html>');
         
         // All files should have CSS link (may be relative)
-        expect(content).toMatch(/href="[\.\/]*styles\.css"/);
+        if (htmlFile.endsWith('index.html')) {
+          // Search pages use search.css
+          expect(content).toMatch(/href="[\.\/]*search\.css"/);
+        } else {
+          // Regular pages use styles.css
+          expect(content).toMatch(/href="[\.\/]*styles\.css"/);
+        }
         
         // No files should contain processing errors in the rendered content
         expect(content).not.toContain('[object Object]');
