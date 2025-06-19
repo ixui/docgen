@@ -20,10 +20,10 @@ Download the latest pre-built package from [GitHub Releases](https://github.com/
 
 ```bash
 # Method 1: Install directly from release tarball (no build required)
-npm install -g https://github.com/ixui/docgen/releases/download/v2.0.3/ixui-docgen-2.0.3.tgz
+npm install -g https://github.com/ixui/docgen/releases/download/v2.0.4/ixui-docgen-2.0.4.tgz
 
 # Method 2: Download and install manually
-wget https://github.com/ixui/docgen/releases/download/v2.0.3/docgen-dist.tar.gz
+wget https://github.com/ixui/docgen/releases/download/v2.0.4/docgen-dist.tar.gz
 tar -xzf docgen-dist.tar.gz
 cd docgen-dist
 npm install -g .
