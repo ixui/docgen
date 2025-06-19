@@ -20,10 +20,10 @@ Download the latest pre-built package from [GitHub Releases](https://github.com/
 
 ```bash
 # Method 1: Install directly from release tarball (no build required)
-npm install -g https://github.com/ixui/docgen/releases/download/v2.0.8/ixui-docgen-2.0.8.tgz
+npm install -g https://github.com/ixui/docgen/releases/download/v2.0.9/ixui-docgen-2.0.9.tgz
 
 # Method 2: Download and install manually
-wget https://github.com/ixui/docgen/releases/download/v2.0.8/docgen-dist.tar.gz
+wget https://github.com/ixui/docgen/releases/download/v2.0.9/docgen-dist.tar.gz
 tar -xzf docgen-dist.tar.gz
 cd docgen-dist
 npm install -g .
@@ -228,7 +228,7 @@ To create a new release:
 
 1. Update the version in `package.json`
 2. Commit the version change
-3. Create and push a git tag: `git tag v2.0.8 && git push origin v2.0.8`
+3. Create and push a git tag: `git tag v2.0.9 && git push origin v2.0.9`
 4. GitHub Actions will automatically build and create a release with pre-built packages
 
 ## Contributing
