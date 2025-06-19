@@ -31,7 +31,7 @@ export class TocGenerator {
       <nav class="toc" aria-label="Table of contents">
         <h2 class="toc-title">目次</h2>
         <div class="toc-back-link">
-          <a href="${indexPath}" class="toc-link toc-index-link">　← インデックスに戻る</a>
+          <a href="${indexPath}" class="toc-link toc-index-link">← インデックスに戻る</a>
         </div>
         ${this.renderTocItems(toc.items)}
       </nav>

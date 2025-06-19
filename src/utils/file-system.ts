@@ -60,7 +60,7 @@ export class FileSystemUtils {
     return ext === '.md' || ext === '.markdown';
   }
 
-  public async getFileStats(filePath: string): Promise<any> {
+  public async getFileStats(filePath: string): Promise<import('fs').Stats> {
     try {
       return await fs.stat(filePath);
     } catch (error) {

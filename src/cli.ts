@@ -20,7 +20,7 @@ program
   .option('--no-search', 'Disable search functionality')
   .option('-w, --watch', 'Watch for changes', false)
   .option('-m, --minify', 'Minify output', false)
-  .action(async (input: string, options: any) => {
+  .action(async (input: string, options: { output?: string; theme?: string; search?: boolean; watch?: boolean; minify?: boolean }) => {
     const fullOptions: DocGenOptions = {
       input,
       output: options.output ?? './dist',

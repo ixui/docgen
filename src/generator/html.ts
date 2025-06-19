@@ -27,7 +27,7 @@ export class HtmlGenerator {
   }
 
   private registerHelpers(): void {
-    Handlebars.registerHelper('json', (context: any) => {
+    Handlebars.registerHelper('json', (context: unknown) => {
       if (context === undefined || context === null) {
         return 'null';
       }
@@ -68,7 +68,7 @@ export class HtmlGenerator {
             loaded = true;
             console.log(`Loaded lunr.js from: ${lunrPath}`);
             break;
-          } catch (e) {
+          } catch {
             // Try next path
           }
         }
@@ -86,7 +86,7 @@ export class HtmlGenerator {
       try {
         const searchPath = path.join(__dirname, '..', 'search', 'search-client.js');
         this.searchScript = await fs.readFile(searchPath, 'utf-8');
-      } catch (error) {
+      } catch {
         console.warn('Failed to load search-client.js, search functionality will be disabled');
         this.searchScript = '';
       }
@@ -99,7 +99,7 @@ export class HtmlGenerator {
     try {
       const templateContent = await fs.readFile(templatePath, 'utf-8');
       this.compiledTemplate = Handlebars.compile(templateContent);
-    } catch (error) {
+    } catch {
       // Fallback to default template
       const defaultTemplate = this.getDefaultTemplate();
       this.compiledTemplate = Handlebars.compile(defaultTemplate);
@@ -209,7 +209,10 @@ export class HtmlGenerator {
       searchScript: this.searchScript,
     };
 
-    const html = this.compiledTemplate!(templateData);
+    if (!this.compiledTemplate) {
+      throw new Error('Template not loaded');
+    }
+    const html = this.compiledTemplate(templateData);
 
     if (options.minify) {
       // TODO: Implement HTML minification

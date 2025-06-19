@@ -261,7 +261,7 @@ export class IndexGenerator {
       }
       
       return null;
-    } catch (error) {
+    } catch {
       return null;
     }
   }

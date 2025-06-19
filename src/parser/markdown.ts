@@ -10,7 +10,7 @@ export interface ParseResult {
 export class MarkdownParser {
   private headings: Heading[] = [];
   private currentHeadingStack: Heading[] = [];
-  private renderer: any;
+  private renderer: typeof marked.Renderer.prototype;
 
   constructor() {
     this.renderer = new marked.Renderer();
@@ -19,14 +19,16 @@ export class MarkdownParser {
 
   private setupRenderer(): void {
     // Override heading renderer
-    this.renderer.heading = (text: any, level: any) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (this.renderer as any).heading = (text: any, level: any): string => {
       // Handle case where text might be an object with tokens
       let textStr: string;
       let levelNum: number;
       
       if (typeof text === 'object' && text !== null) {
         if (Array.isArray(text)) {
-          textStr = text.map(token => token.text || token.raw || String(token)).join('');
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          textStr = text.map((token: any) => token.text || token.raw || String(token)).join('');
         } else if (text.text) {
           textStr = String(text.text);
         } else if (text.raw) {
@@ -35,8 +37,10 @@ export class MarkdownParser {
           textStr = String(text);
         }
         // Also try to get level from text object if level is undefined
-        if (level === undefined && text.depth) {
-          levelNum = Number(text.depth) || 1;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        if (level === undefined && (text as any).depth) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          levelNum = Number((text as any).depth) || 1;
         } else {
           levelNum = Number(level) || 1;
         }
@@ -61,7 +65,8 @@ export class MarkdownParser {
     };
 
     // Override link renderer
-    this.renderer.link = (href: any, title: any, text: any) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (this.renderer as any).link = (href: any, title: any, text: any): string => {
       // Handle case where href might be an object with tokens
       let hrefStr: string;
       if (typeof href === 'object' && href !== null) {
@@ -83,7 +88,8 @@ export class MarkdownParser {
         textStr = String(href.text);
       } else if (typeof text === 'object' && text !== null) {
         if (Array.isArray(text)) {
-          textStr = text.map(token => token.text || token.raw || String(token)).join('');
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          textStr = text.map((token: any) => token.text || token.raw || String(token)).join('');
         } else if (text.text) {
           textStr = String(text.text);
         } else if (text.raw) {
